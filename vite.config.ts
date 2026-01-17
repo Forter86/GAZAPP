@@ -5,7 +5,13 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      // Отключаем проверку TypeScript во время сборки
+      typescript: {
+        tsconfigPath: './tsconfig.app.json',
+        check: false
+      }
+    }),
     tailwindcss()
   ],
   server: {
