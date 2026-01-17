@@ -122,18 +122,9 @@ Email: ${formData.email}
       //   }
       // );
 
-      // ВАРИАНТ 2: Отправка через ваш бэкенд API
-      // Замените URL на ваш реальный endpoint (для продакшена)
-      // Для локальной разработки используйте: http://localhost:3001/send-application
-      // Используем Vercel Serverless Function (API route)
-      // Принудительно используем относительный путь к API route
-      let API_URL = '/api/send-application';
-      
-      // Если есть переменная окружения и она не содержит старые URL, используем её
-      const envUrl = import.meta.env.VITE_API_URL;
-      if (envUrl && !envUrl.includes('loca.lt') && !envUrl.includes('ngrok') && !envUrl.includes('YOUR_BACKEND')) {
-        API_URL = envUrl;
-      }
+      // ВАРИАНТ 2: Отправка через Vercel Serverless Function
+      // ВСЕГДА используем /api/send-application (игнорируем все переменные окружения)
+      const API_URL = '/api/send-application';
       
       console.log('Отправка заявки на:', API_URL);
       console.log('Данные формы:', formData);
