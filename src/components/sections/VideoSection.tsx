@@ -8,12 +8,8 @@ export const VideoSection = () => {
     const [hasInteracted, setHasInteracted] = useState(false);
     const [videoError, setVideoError] = useState(false);
 
-    // URL видео - можно использовать внешнюю ссылку или локальный файл
-    // Приоритет: переменная окружения > Google Drive ссылка > локальный файл
-    // Для Google Drive используйте формат: https://drive.google.com/uc?export=download&id=FILE_ID
-    const videoUrl = import.meta.env.VITE_VIDEO_URL || 
-                     'https://drive.google.com/uc?export=download&id=1h6eWkktxQDlZe5a3Iav7aZjzBFrNPF3G' || 
-                     '/gzp_video.mp4';
+    // Локальный файл видео (только для стационарного сервера)
+    const videoUrl = '/gzp_video.mp4';
 
     const handlePlayClick = () => {
         if (videoRef.current) {
