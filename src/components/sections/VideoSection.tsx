@@ -35,7 +35,6 @@ export const VideoSection = () => {
     const handlePause = () => setIsPlaying(false);
     const handleVideoError = () => {
         setVideoError(true);
-        console.warn('Видео не загрузилось. Проверьте URL или загрузите файл на хостинг.');
     };
 
     return (
@@ -53,7 +52,9 @@ export const VideoSection = () => {
                     src={videoUrl}
                     className={`w-full h-full ${hasInteracted ? 'object-contain' : 'object-cover'}`}
                     playsInline
-                    controls={hasInteracted} // Включаем нативные контролы только после нажатия Play
+                    webkit-playsinline="true"
+                    preload="metadata"
+                    controls={hasInteracted}
                     onEnded={handleVideoEnded}
                     onPlay={handlePlay}
                     onPause={handlePause}
