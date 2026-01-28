@@ -8,8 +8,10 @@ export const VideoSection = () => {
     const [hasInteracted, setHasInteracted] = useState(false);
     const [videoError, setVideoError] = useState(false);
 
-    // Локальный файл видео (только для стационарного сервера)
-    const videoUrl = '/gzp_video.mp4';
+    // Приоритет: Vercel Blob Storage > локальный файл
+    // Для Vercel: установи переменную окружения VITE_VIDEO_URL в настройках проекта
+    // Для стационарного сервера: используй локальный файл /gzp_video.mp4
+    const videoUrl = import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
 
     const handlePlayClick = () => {
         if (videoRef.current) {
