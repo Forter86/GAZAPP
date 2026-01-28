@@ -5,13 +5,17 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   variant?: 'primary' | 'secondary' | 'outline';
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 export const Button = ({ 
   children, 
   onClick, 
   className = '', 
-  variant = 'primary' 
+  variant = 'primary',
+  type = 'button',
+  disabled = false
 }: ButtonProps) => {
   const baseStyles = "px-8 py-4 rounded-2xl font-bold text-lg transition-all active:scale-95 text-center cursor-pointer";
   
@@ -21,10 +25,14 @@ export const Button = ({
     outline: "border-2 border-[#4A90E2] text-[#4A90E2] bg-transparent"
   };
 
+  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "";
+
   return (
     <button 
+      type={type}
       onClick={onClick}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${disabledStyles} ${className}`}
     >
       {children}
     </button>

@@ -1,12 +1,12 @@
 import { Button } from '../atoms/Button';
 import { Heading } from '../atoms/Heading';
-import gazpromLogo from '../../assets/lojotipch.png';
+import gazpromLogo from '../../assets/logo_white.jpg';
 
 interface HeroSectionProps {
-  onOpenForm: () => void;
+  onScrollToForm: () => void;
 }
 
-export const HeroSection = ({ onOpenForm }: HeroSectionProps) => {
+export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
   return (
     <section className="px-6 pt-12 pb-16 flex flex-col items-center text-center relative overflow-hidden">
       {/* Abstract background shapes */}
@@ -15,24 +15,26 @@ export const HeroSection = ({ onOpenForm }: HeroSectionProps) => {
 
       <Heading level={1} className="mb-4">
         Работа <br />
-        <span className="text-[#4A90E2]">в Газпром Трансгаз Сургут</span>
+        <span className="text-[#4A90E2]">в ООО «Газпром Трансгаз Сургут»</span>
       </Heading>
-      
+
       <p className="text-gray-600 text-lg mb-10 max-w-[280px]">
         Выбери свою профессию и начни карьеру в крупнейшей газотранспортной компании.
       </p>
 
       <div className="w-full max-w-[300px] aspect-square relative mb-12">
         <div className="absolute inset-0 bg-[#E8E8E8] rounded-[40px] rotate-6 scale-95" />
-        <div className="absolute inset-0 bg-white shadow-xl rounded-[40px] flex items-center justify-center p-8">
-           <div className="w-full h-full bg-[#4A90E2]/5 rounded-3xl flex items-center justify-center">
-              <img src={gazpromLogo} alt="Газпром Трансгаз Сургут" className="w-full h-auto max-w-[180px]" />
-           </div>
+        <div className="absolute inset-0 bg-white shadow-xl rounded-[40px] flex items-center justify-center p-6">
+          <img
+            src={gazpromLogo}
+            alt="Газпром Трансгаз Сургут"
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
 
-      <Button className="w-full" onClick={onOpenForm}>
-        Подать заявку
+      <Button className="w-full" onClick={onScrollToForm}>
+        Хочу в ГАЗПРОМ
       </Button>
     </section>
   );
