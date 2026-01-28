@@ -6,10 +6,20 @@ export const VideoSection = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
+    const [videoError, setVideoError] = useState(false);
+
+    // URL видео - можно использовать внешнюю ссылку или локальный файл
+    // Приоритет: переменная окружения > Google Drive ссылка > локальный файл
+    // Для Google Drive используйте формат: https://drive.google.com/uc?export=download&id=FILE_ID
+    const videoUrl = import.meta.env.VITE_VIDEO_URL || 
+                     'https://drive.google.com/uc?export=download&id=1h6eWkktxQDlZe5a3Iav7aZjzBFrNPF3G' || 
+                     '/gzp_video.mp4';
 
     const handlePlayClick = () => {
         if (videoRef.current) {
-            videoRef.current.play();
+            videoRef.current.play().catch(() => {
+                setVideoError(true);
+            });
             setHasInteracted(true);
             setIsPlaying(true);
         }
@@ -25,6 +35,15 @@ export const VideoSection = () => {
 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
+    const handleVideoError = () => {
+        setVideoError(true);
+        console.warn('Видео не загрузилось. Проверьте URL или загрузите файл на хостинг.');
+    };
+
+    // Если видео недоступно, не показываем секцию
+    if (videoError && videoUrl === '/gzp_video.mp4') {
+        return null;
+    }
 
     return (
         <section className="px-6 py-12 relative">
@@ -38,13 +57,14 @@ export const VideoSection = () => {
             >
                 <video
                     ref={videoRef}
-                    src="/gzp_video.mp4"
+                    src={videoUrl}
                     className={`w-full h-full ${hasInteracted ? 'object-contain' : 'object-cover'}`}
                     playsInline
                     controls={hasInteracted} // Включаем нативные контролы только после нажатия Play
                     onEnded={handleVideoEnded}
                     onPlay={handlePlay}
                     onPause={handlePause}
+                    onError={handleVideoError}
                 />
 
                 {/* Custom Play Overlay - показываем только пока не начали взаимодействие */}
