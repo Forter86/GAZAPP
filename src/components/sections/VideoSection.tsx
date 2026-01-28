@@ -36,11 +36,6 @@ export const VideoSection = () => {
         console.warn('Видео не загрузилось. Проверьте URL или загрузите файл на хостинг.');
     };
 
-    // Если видео недоступно, не показываем секцию
-    if (videoError && videoUrl === '/gzp_video.mp4') {
-        return null;
-    }
-
     return (
         <section className="px-6 py-12 relative">
             <Heading level={2} className="mb-8 text-center">
