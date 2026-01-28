@@ -13,13 +13,23 @@ export const VideoSection = () => {
     // 2. Локальный файл - fallback для стационарного сервера (/gzp_video.mp4)
     const videoUrl = import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
 
-    const handlePlayClick = () => {
+    const handlePlayClick = async () => {
         if (videoRef.current) {
-            videoRef.current.play().catch(() => {
+            try {
+                // Для мобильных устройств иногда нужно сначала загрузить видео
+                if (videoRef.current.readyState < 2) {
+                    videoRef.current.load();
+                    await new Promise((resolve) => {
+                        videoRef.current?.addEventListener('canplay', resolve, { once: true });
+                    });
+                }
+                await videoRef.current.play();
+                setHasInteracted(true);
+                setIsPlaying(true);
+            } catch (error) {
                 setVideoError(true);
-            });
-            setHasInteracted(true);
-            setIsPlaying(true);
+                console.error('Play error:', error);
+            }
         }
     };
 
@@ -53,7 +63,7 @@ export const VideoSection = () => {
                     className={`w-full h-full ${hasInteracted ? 'object-contain' : 'object-cover'}`}
                     playsInline
                     webkit-playsinline="true"
-                    preload="metadata"
+                    preload="auto"
                     controls={hasInteracted}
                     onEnded={handleVideoEnded}
                     onPlay={handlePlay}
@@ -64,8 +74,9 @@ export const VideoSection = () => {
                 {/* Custom Play Overlay - показываем только пока не начали взаимодействие */}
                 {!hasInteracted && (
                     <div
-                        className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer hover:bg-black/30 transition-colors"
+                        className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer hover:bg-black/30 transition-colors touch-none"
                         onClick={handlePlayClick}
+                        onTouchStart={handlePlayClick}
                     >
                         <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 shadow-lg group-hover:scale-110 transition-transform">
                             <Play className="w-8 h-8 text-white fill-white translate-x-1" />
