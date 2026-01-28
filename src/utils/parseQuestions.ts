@@ -31,7 +31,8 @@ export const parseQuestions = (text: string): Question[] => {
   // Функция для очистки строки от маркеров
   const cleanLine = (line: string): string => {
     return line
-      .replace(/^[•\-\d\.\s]+/, '') // Убираем маркеры •, -, номера в начале
+      .replace(/^[•\-\s]+/, '') // Убираем только маркеры •, - и пробелы в начале
+      .replace(/^\d+\.\s*/, '') // Убираем номер с точкой типа "1. " или "50. "
       .replace(/\\+$/, '') // Убираем \ в конце
       .trim();
   };
