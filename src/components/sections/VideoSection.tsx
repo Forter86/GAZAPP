@@ -13,23 +13,13 @@ export const VideoSection = () => {
     // 2. Локальный файл - fallback для стационарного сервера (/gzp_video.mp4)
     const videoUrl = import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
 
-    const handlePlayClick = async () => {
+    const handlePlayClick = () => {
         if (videoRef.current) {
-            try {
-                // Для мобильных устройств иногда нужно сначала загрузить видео
-                if (videoRef.current.readyState < 2) {
-                    videoRef.current.load();
-                    await new Promise((resolve) => {
-                        videoRef.current?.addEventListener('canplay', resolve, { once: true });
-                    });
-                }
-                await videoRef.current.play();
-                setHasInteracted(true);
-                setIsPlaying(true);
-            } catch (error) {
-                setVideoError(true);
-                console.error('Play error:', error);
-            }
+            // Просто показываем контролы и позволяем браузеру самому обработать воспроизведение
+            setHasInteracted(true);
+            videoRef.current.play().catch(() => {
+                // Игнорируем ошибку, пользователь может нажать play на контролах
+            });
         }
     };
 
@@ -62,8 +52,7 @@ export const VideoSection = () => {
                     src={videoUrl}
                     className={`w-full h-full ${hasInteracted ? 'object-contain' : 'object-cover'}`}
                     playsInline
-                    webkit-playsinline="true"
-                    preload="auto"
+                    preload="none"
                     controls={hasInteracted}
                     onEnded={handleVideoEnded}
                     onPlay={handlePlay}
