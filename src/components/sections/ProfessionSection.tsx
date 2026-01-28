@@ -184,19 +184,23 @@ export const ProfessionSection = () => {
         {professions.map((profession, index) => {
           const Icon = profession.icon;
           return (
-            <Card
+            <div
               key={index}
               onClick={() => setSelectedProfession(index)}
-              className="snap-center shrink-0 w-[375px] flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px] cursor-pointer hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="snap-center shrink-0 w-[375px] cursor-pointer"
             >
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#4A90E2]/10 text-[#4A90E2] shrink-0 mb-2">
-                <Icon size={28} strokeWidth={2} />
-              </div>
-              <div className="flex-1 w-full max-w-full">
-                <h4 className="font-bold text-xl mb-3 leading-snug whitespace-normal break-words">{profession.title}</h4>
-                <p className="text-gray-500 text-base leading-relaxed whitespace-normal break-words w-full">{profession.description}</p>
-              </div>
-            </Card>
+              <Card
+                className="flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px] hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#4A90E2]/10 text-[#4A90E2] shrink-0 mb-2">
+                  <Icon size={28} strokeWidth={2} />
+                </div>
+                <div className="flex-1 w-full max-w-full">
+                  <h4 className="font-bold text-xl mb-3 leading-snug whitespace-normal break-words">{profession.title}</h4>
+                  <p className="text-gray-500 text-base leading-relaxed whitespace-normal break-words w-full">{profession.description}</p>
+                </div>
+              </Card>
+            </div>
           );
         })}
       </div>
