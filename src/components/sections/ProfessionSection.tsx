@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { Heading } from '../atoms/Heading';
 import { Card } from '../atoms/Card';
+import { X } from 'lucide-react';
 import {
   Fan,
   Wrench,
@@ -17,6 +18,7 @@ export const ProfessionSection = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedProfession, setSelectedProfession] = useState<number | null>(null);
   const AUTOSCROLL_INTERVAL = 4000; // 4 секунды на слайд
   const progressRef = useRef<SVGCircleElement>(null);
 
@@ -24,37 +26,44 @@ export const ProfessionSection = () => {
     {
       icon: Fan,
       title: "Машинист технологических компрессоров",
-      description: "Обеспечение бесперебойной работы компрессорных установок"
+      description: "Обеспечение бесперебойной работы компрессорных установок",
+      fullDescription: "Управляет и контролирует работу мощных компрессорных установок, обеспечивая сжатие газа до требуемых параметров в магистральном газопроводе. Отвечает за безопасную и стабильную работу ключевого оборудования компрессорной станции, соблюдение режимных карт, диагностику оборудования и безаварийную эксплуатацию агрегатов на компрессорной станции."
     },
     {
       icon: Wrench,
       title: "Слесарь по ремонту технологических установок",
-      description: "Ремонт и техническое обслуживание промышленного оборудования"
+      description: "Ремонт и техническое обслуживание промышленного оборудования",
+      fullDescription: "Выполняет планово-предупредительный и аварийный ремонт узлов и механизмов технологического оборудования: насосов, компрессоров, запорно-регулирующей арматуры. Обеспечивает техническую готовность к работе технологических линий в соответствии с регламентами."
     },
     {
       icon: Gauge,
       title: "Слесарь КИПиА",
-      description: "Настройка и обслуживание систем автоматики и измерений"
+      description: "Настройка и обслуживание систем автоматики и измерений",
+      fullDescription: "Обслуживает, настраивает и ремонтирует средства КИП, системы телемеханики и элементы АСУ ТП. Обеспечивает метрологическую исправность приборов учёта, контроля давления, температуры и средств автоматической защиты."
     },
     {
       icon: Flame,
       title: "Сварщик",
-      description: "Сварочные работы на газопроводах и технологических объектах"
+      description: "Сварочные работы на газопроводах и технологических объектах",
+      fullDescription: "Выполняет монтажную и ремонтную сварку трубопроводов, сосудов давления и строительных металлоконструкций. Работы проводятся в соответствии со строгими нормативными требованиями (ПБ, СНиП, ГОСТ) с применением специализированных технологий (РД, НГТ)."
     },
     {
       icon: Settings,
       title: "Оператор ГРС",
-      description: "Контроль распределения газа потребителям"
+      description: "Контроль распределения газа потребителям",
+      fullDescription: "Управляет технологическим процессом подготовки, редуцирования и распределения газа на ГРС. Контролирует параметры потока, работу систем очистки и переключения на обвязке станции."
     },
     {
       icon: Zap,
       title: "Электромонтер",
-      description: "Ремонт и обслуживание электросетей и оборудования"
+      description: "Ремонт и обслуживание электросетей и оборудования",
+      fullDescription: "Обеспечивает эксплуатационную готовность силового и низковольтного электрооборудования, систем освещения и защитного заземления. Проводит плановые и аварийные работы на распределительных устройствах, электродвигателях и схемах управления."
     },
     {
       icon: Hammer,
       title: "Слесарь аварийно-восстановительных работ",
-      description: "Оперативное устранение неисправностей на газопроводах"
+      description: "Оперативное устранение неисправностей на газопроводах",
+      fullDescription: "Входит в состав бригады оперативного реагирования для локализации и ликвидации утечек, повреждений на магистральных и распределительных газопроводах. Выполняет работы под давлением с применением специализированного оборудования в соответствии с регламентами по ликвидации аварий."
     }
   ];
 
@@ -121,6 +130,18 @@ export const ProfessionSection = () => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [activeIndex]);
 
+  // Блокируем скролл body когда модальное окно открыто
+  useEffect(() => {
+    if (selectedProfession !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedProfession]);
+
   // Автопрокрутка
   useEffect(() => {
     if (isPaused) return;
@@ -165,7 +186,8 @@ export const ProfessionSection = () => {
           return (
             <Card
               key={index}
-              className="snap-center shrink-0 w-[375px] flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px]"
+              onClick={() => setSelectedProfession(index)}
+              className="snap-center shrink-0 w-[375px] flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px] cursor-pointer hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#4A90E2]/10 text-[#4A90E2] shrink-0 mb-2">
                 <Icon size={28} strokeWidth={2} />
@@ -224,6 +246,56 @@ export const ProfessionSection = () => {
           </button>
         </div>
       </div>
+
+      {/* Модальное окно с развернутым описанием */}
+      {selectedProfession !== null && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          onClick={() => setSelectedProfession(null)}
+        >
+          <div
+            className="bg-white rounded-[40px] w-full max-w-md max-h-[90vh] overflow-y-auto relative flex flex-col animate-in zoom-in-95 duration-300"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-white z-20 px-6 py-4 flex items-center justify-between border-b border-gray-100">
+              <span className="font-semibold text-gray-800">Описание профессии</span>
+              <button 
+                onClick={() => setSelectedProfession(null)}
+                className="p-2 -mr-2 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {selectedProfession !== null && (() => {
+                const profession = professions[selectedProfession];
+                const Icon = profession.icon;
+                return (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-[#4A90E2]/10 text-[#4A90E2] shrink-0">
+                        <Icon size={32} strokeWidth={2} />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-800 leading-tight">
+                        {profession.title}
+                      </h3>
+                    </div>
+                    
+                    <div className="pt-4 border-t border-gray-100">
+                      <p className="text-gray-600 text-base leading-relaxed">
+                        {profession.fullDescription}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
