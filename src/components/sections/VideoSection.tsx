@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { Heading } from '../atoms/Heading';
 import { Play } from 'lucide-react';
 
@@ -8,10 +8,24 @@ export const VideoSection = () => {
     const [hasInteracted, setHasInteracted] = useState(false);
     const [videoError, setVideoError] = useState(false);
 
-    // Два способа загрузки видео:
-    // 1. Ссылка с GitHub (или любая прямая ссылка) - установи переменную VITE_VIDEO_URL в Vercel
-    // 2. Локальный файл - fallback для стационарного сервера (/gzp_video.mp4)
-    const videoUrl = import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
+    // Определяем устройство
+    const isIOS = useMemo(() => /iPhone|iPad|iPod/i.test(navigator.userAgent), []);
+    const isMobile = useMemo(() => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent), []);
+
+    // Варианты загрузки видео:
+    // 1. Для iOS - VITE_VIDEO_URL_IOS (если задано)
+    // 2. Для мобильных - VITE_VIDEO_URL_MOBILE (если задано)
+    // 3. Общая ссылка - VITE_VIDEO_URL
+    // 4. Локальный файл - fallback (/gzp_video.mp4)
+    const videoUrl = useMemo(() => {
+        if (isIOS && import.meta.env.VITE_VIDEO_URL_IOS) {
+            return import.meta.env.VITE_VIDEO_URL_IOS;
+        }
+        if (isMobile && import.meta.env.VITE_VIDEO_URL_MOBILE) {
+            return import.meta.env.VITE_VIDEO_URL_MOBILE;
+        }
+        return import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
+    }, [isIOS, isMobile]);
 
     const handlePlayClick = () => {
         if (videoRef.current) {
@@ -49,7 +63,6 @@ export const VideoSection = () => {
             >
                 <video
                     ref={videoRef}
-                    src={videoUrl}
                     className="w-full h-full object-contain"
                     playsInline
                     preload="metadata"
@@ -58,7 +71,14 @@ export const VideoSection = () => {
                     onPlay={handlePlay}
                     onPause={handlePause}
                     onError={handleVideoError}
-                />
+                >
+                    {/* Для iOS - явно указываем H.264 кодек */}
+                    {isIOS ? (
+                        <source src={videoUrl} type="video/mp4; codecs=avc1.42E01E, mp4a.40.2" />
+                    ) : (
+                        <source src={videoUrl} type="video/mp4" />
+                    )}
+                </video>
             </div>
         </section>
     );
