@@ -50,28 +50,15 @@ export const VideoSection = () => {
                 <video
                     ref={videoRef}
                     src={videoUrl}
-                    className={`w-full h-full ${hasInteracted ? 'object-contain' : 'object-cover'}`}
+                    className="w-full h-full object-contain"
                     playsInline
-                    preload="none"
-                    controls={hasInteracted}
+                    preload="metadata"
+                    controls
                     onEnded={handleVideoEnded}
                     onPlay={handlePlay}
                     onPause={handlePause}
                     onError={handleVideoError}
                 />
-
-                {/* Custom Play Overlay - показываем только пока не начали взаимодействие */}
-                {!hasInteracted && (
-                    <div
-                        className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer hover:bg-black/30 transition-colors touch-none"
-                        onClick={handlePlayClick}
-                        onTouchStart={handlePlayClick}
-                    >
-                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/40 shadow-lg group-hover:scale-110 transition-transform">
-                            <Play className="w-8 h-8 text-white fill-white translate-x-1" />
-                        </div>
-                    </div>
-                )}
             </div>
         </section>
     );
