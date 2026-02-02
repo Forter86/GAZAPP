@@ -1,6 +1,7 @@
-import { useRef, useEffect, useState } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import { Heading } from '../atoms/Heading';
 import { Card } from '../atoms/Card';
+import { Button } from '../atoms/Button';
 import { X } from 'lucide-react';
 import {
   Fan,
@@ -19,8 +20,22 @@ export const ProfessionSection = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProfession, setSelectedProfession] = useState<number | null>(null);
+  const [isProfessionsVideoOpen, setIsProfessionsVideoOpen] = useState(false);
   const AUTOSCROLL_INTERVAL = 4000; // 4 секунды на слайд
   const progressRef = useRef<SVGCircleElement>(null);
+
+  const isIOS = useMemo(() => /iPhone|iPad|iPod/i.test(navigator.userAgent), []);
+
+  // Видео для кнопки "Знакомство с профессиями"
+  // Можно задать в Vercel/ENV: VITE_PROFESSIONS_VIDEO_URL
+  // Фолбек: общий VITE_VIDEO_URL или локальный /gzp_video.mp4 (если он есть)
+  const professionsVideoUrl = useMemo(() => {
+    return (
+      import.meta.env.VITE_PROFESSIONS_VIDEO_URL ||
+      import.meta.env.VITE_VIDEO_URL ||
+      '/gzp_video.mp4'
+    );
+  }, []);
 
   const professions = [
     {
@@ -132,7 +147,7 @@ export const ProfessionSection = () => {
 
   // Блокируем скролл body когда модальное окно открыто
   useEffect(() => {
-    if (selectedProfession !== null) {
+    if (selectedProfession !== null || isProfessionsVideoOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -140,7 +155,7 @@ export const ProfessionSection = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedProfession]);
+  }, [selectedProfession, isProfessionsVideoOpen]);
 
   // Автопрокрутка
   useEffect(() => {
@@ -251,6 +266,20 @@ export const ProfessionSection = () => {
         </div>
       </div>
 
+      {/* CTA под стрелками */}
+      <div className="flex items-center justify-center pb-2">
+        <Button
+          variant="outline"
+          className="px-6 py-3 text-base rounded-full shadow-sm bg-white/80 backdrop-blur"
+          onClick={() => {
+            setSelectedProfession(null);
+            setIsProfessionsVideoOpen(true);
+          }}
+        >
+          Знакомство с профессиями
+        </Button>
+      </div>
+
       {/* Модальное окно с развернутым описанием */}
       {selectedProfession !== null && (
         <div
@@ -296,6 +325,53 @@ export const ProfessionSection = () => {
                   </div>
                 );
               })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно с видео */}
+      {isProfessionsVideoOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          onClick={() => setIsProfessionsVideoOpen(false)}
+        >
+          <div
+            className="bg-white rounded-[40px] w-full max-w-md max-h-[90vh] overflow-hidden relative flex flex-col animate-in zoom-in-95 duration-300"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
+              <span className="font-semibold text-gray-800">Знакомство с профессиями</span>
+              <button
+                onClick={() => setIsProfessionsVideoOpen(false)}
+                className="p-2 -mr-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Закрыть"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            <div className="p-4">
+              <div className="relative w-full aspect-video bg-black rounded-[28px] overflow-hidden shadow-[0_24px_70px_-10px_rgba(74,144,226,0.5)] border-4 border-white/20">
+                <video
+                  className="w-full h-full object-contain"
+                  playsInline
+                  preload="metadata"
+                  controls
+                >
+                  {isIOS ? (
+                    <source
+                      src={professionsVideoUrl}
+                      type="video/mp4; codecs=avc1.42E01E, mp4a.40.2"
+                    />
+                  ) : (
+                    <source src={professionsVideoUrl} type="video/mp4" />
+                  )}
+                </video>
+              </div>
+              <p className="text-xs text-gray-500 mt-3 text-center">
+                Если нужно заменить видео — дай ссылку, я подключу через `VITE_PROFESSIONS_VIDEO_URL`.
+              </p>
             </div>
           </div>
         </div>
