@@ -10,7 +10,6 @@ interface ApplicationFormProps {
   isSubmitting?: boolean;
   submitStatus?: 'idle' | 'success' | 'error';
   errorMessage?: string;
-  onOpenQuiz?: () => void;
 }
 
 type FormType = 'employment' | 'internship';
@@ -43,8 +42,7 @@ export const ApplicationForm = ({
   onSubmit,
   isSubmitting = false,
   submitStatus = 'idle',
-  errorMessage = '',
-  onOpenQuiz
+  errorMessage = ''
 }: ApplicationFormProps) => {
   const [view, setView] = useState<ViewState>('choice');
 
@@ -180,7 +178,7 @@ export const ApplicationForm = ({
     <div className="flex flex-col gap-6 items-center justify-center h-full pt-10">
       <h2 className="text-2xl font-bold text-center mb-4">
         Выбирай свой путь в <br />
-        <span className="text-[#4A90E2] drop-shadow-sm">ООО «Газпром Трансгаз Сургут»</span>
+        <span className="text-[#4A90E2] drop-shadow-sm">ООО «Газпром трансгаз Сургут»</span>
       </h2>
 
       <div className="w-full space-y-4">
@@ -206,21 +204,6 @@ export const ApplicationForm = ({
           <div className="absolute top-0 right-0 w-24 h-24 bg-[#4A90E2]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#4A90E2]/10 transition-colors" />
         </button>
 
-        {onOpenQuiz && (
-          <button
-            onClick={() => {
-              onClose();
-              onOpenQuiz();
-            }}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-[24px] text-left hover:from-purple-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-1 relative overflow-hidden group"
-          >
-            <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-1">Викторина</h3>
-              <p className="text-purple-100 text-sm opacity-90">Проверь свои знания о компании</p>
-            </div>
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform" />
-          </button>
-        )}
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useMemo } from 'react';
 import { Heading } from '../atoms/Heading';
-import { Play } from 'lucide-react';
+// import { Play } from 'lucide-react';
 
 export const VideoSection = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [hasInteracted, setHasInteracted] = useState(false);
-    const [videoError, setVideoError] = useState(false);
+    // const [isPlaying, setIsPlaying] = useState(false);
+    // const [hasInteracted, setHasInteracted] = useState(false);
+    // const [videoError, setVideoError] = useState(false);
 
     // Определяем устройство
     const isIOS = useMemo(() => /iPhone|iPad|iPod/i.test(navigator.userAgent), []);
@@ -27,29 +27,19 @@ export const VideoSection = () => {
         return import.meta.env.VITE_VIDEO_URL || '/gzp_video.mp4';
     }, [isIOS, isMobile]);
 
-    const handlePlayClick = () => {
-        if (videoRef.current) {
-            // Просто показываем контролы и позволяем браузеру самому обработать воспроизведение
-            setHasInteracted(true);
-            videoRef.current.play().catch(() => {
-                // Игнорируем ошибку, пользователь может нажать play на контролах
-            });
-        }
-    };
-
     const handleVideoEnded = () => {
-        setIsPlaying(false);
-        setHasInteracted(false); // Возвращаем красивую обложку после окончания
+        // setIsPlaying(false);
+        // setHasInteracted(false); // Возвращаем красивую обложку после окончания
         if (videoRef.current) {
             videoRef.current.load(); // Сбрасываем видео в начало
         }
     };
 
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-    const handleVideoError = () => {
-        setVideoError(true);
-    };
+    // const handlePlay = () => setIsPlaying(true);
+    // const handlePause = () => setIsPlaying(false);
+    // const handleVideoError = () => {
+    //     setVideoError(true);
+    // };
 
     return (
         <section className="px-6 py-12 relative">
@@ -68,9 +58,9 @@ export const VideoSection = () => {
                     preload="metadata"
                     controls
                     onEnded={handleVideoEnded}
-                    onPlay={handlePlay}
-                    onPause={handlePause}
-                    onError={handleVideoError}
+                // onPlay={handlePlay}
+                // onPause={handlePause}
+                // onError={handleVideoError}
                 >
                     {/* Для iOS - явно указываем H.264 кодек */}
                     {isIOS ? (

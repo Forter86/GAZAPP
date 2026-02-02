@@ -190,7 +190,7 @@ export const ProfessionSection = () => {
               className="snap-center shrink-0 w-[375px] cursor-pointer"
             >
               <Card
-                className="flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px] hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex flex-col items-start gap-4 p-5 border-l-4 border-[#4A90E2] rounded-l-2xl !rounded-[32px] relative bg-white shadow-sm min-h-[220px] hover:shadow-[0_20px_40px_-10px_rgba(74,144,226,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#4A90E2]/10 text-[#4A90E2] shrink-0 mb-2">
                   <Icon size={28} strokeWidth={2} />
@@ -253,7 +253,7 @@ export const ProfessionSection = () => {
 
       {/* Модальное окно с развернутым описанием */}
       {selectedProfession !== null && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
           onClick={() => setSelectedProfession(null)}
         >
@@ -264,7 +264,7 @@ export const ProfessionSection = () => {
             {/* Header */}
             <div className="sticky top-0 bg-white z-20 px-6 py-4 flex items-center justify-between border-b border-gray-100">
               <span className="font-semibold text-gray-800">Описание профессии</span>
-              <button 
+              <button
                 onClick={() => setSelectedProfession(null)}
                 className="p-2 -mr-2 rounded-full hover:bg-gray-100 transition-colors"
               >
@@ -287,7 +287,7 @@ export const ProfessionSection = () => {
                         {profession.title}
                       </h3>
                     </div>
-                    
+
                     <div className="pt-4 border-t border-gray-100">
                       <p className="text-gray-600 text-base leading-relaxed whitespace-pre-line">
                         {profession.fullDescription}

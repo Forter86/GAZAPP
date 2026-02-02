@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronLeft, CheckCircle2, XCircle, Trophy, Star } from 'lucide-react';
+import { X, ChevronLeft, CheckCircle2, Trophy, Star } from 'lucide-react';
 import { Button } from '../atoms/Button';
 
 interface QuizSectionProps {
@@ -26,7 +26,7 @@ const resultMessages: Record<number, string> = {
   2: 'Неплохо! Ты на правильном пути к карьере в Газпроме!',
   3: 'Отлично! Ты почти готов стать частью команды!',
   4: 'Превосходно! Ты готов присоединиться к нам!',
-  5: 'Идеально! Ты готов стать частью команды ООО «Газпром Трансгаз Сургут»!'
+  5: 'Идеально! Ты готов стать частью команды ООО «Газпром трансгаз Сургут»!'
 };
 
 export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) => {
@@ -70,7 +70,7 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (showResult) return;
-    
+
     const newAnswers = [...selectedAnswers];
     newAnswers[currentQuestionIndex] = answerIndex;
     setSelectedAnswers(newAnswers);
@@ -78,7 +78,7 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
 
   const handleNext = () => {
     if (selectedAnswers[currentQuestionIndex] === undefined) return;
-    
+
     if (currentQuestionIndex < selectedQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -103,7 +103,7 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
 
     const total = selectedQuestions.length;
     const message = resultMessages[score] || resultMessages[0];
-    
+
     setResult({ score, total, message });
     setShowResult(true);
   };
@@ -123,8 +123,8 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
         {/* Header */}
         <div className="sticky top-0 bg-white z-20 px-6 py-4 flex items-center justify-between border-b border-gray-100">
           {!showResult && (
-            <button 
-              onClick={currentQuestionIndex > 0 ? handlePrev : onClose} 
+            <button
+              onClick={currentQuestionIndex > 0 ? handlePrev : onClose}
               className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
             >
               <ChevronLeft className="w-6 h-6 text-gray-600" />
@@ -176,14 +176,14 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
                 <Button onClick={onClose} variant="primary" className="w-full">
                   Отлично!
                 </Button>
-                <Button 
+                <Button
                   onClick={() => {
                     setCurrentQuestionIndex(0);
                     setSelectedAnswers([]);
                     setShowResult(false);
                     setResult(null);
-                  }} 
-                  variant="outline" 
+                  }}
+                  variant="outline"
                   className="w-full"
                 >
                   Пройти еще раз
@@ -215,16 +215,14 @@ export const QuizSection = ({ isOpen, onClose, questions }: QuizSectionProps) =>
                       <button
                         key={index}
                         onClick={() => handleAnswerSelect(index)}
-                        className={`w-full p-4 rounded-2xl text-left transition-all border-2 ${
-                          isSelected
-                            ? 'bg-[#4A90E2] text-white border-[#4A90E2] shadow-lg shadow-blue-500/30'
-                            : 'bg-white text-gray-800 border-gray-200 hover:border-[#4A90E2] hover:shadow-md'
-                        }`}
+                        className={`w-full p-4 rounded-2xl text-left transition-all border-2 ${isSelected
+                          ? 'bg-[#4A90E2] text-white border-[#4A90E2] shadow-lg shadow-blue-500/30'
+                          : 'bg-white text-gray-800 border-gray-200 hover:border-[#4A90E2] hover:shadow-md'
+                          }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
-                            isSelected ? 'bg-white/20' : 'bg-gray-100'
-                          }`}>
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-white/20' : 'bg-gray-100'
+                            }`}>
                             {isSelected && (
                               <CheckCircle2 className="w-4 h-4 text-white" />
                             )}

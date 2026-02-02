@@ -6,10 +6,10 @@ export const RequirementsSection = () => {
   return (
     <section className="px-6 py-1 relative overflow-hidden">
       <div className="flex items-center gap-4 mb-4 relative z-10">
-        <Heading level={2} className="flex-1 mt-[80px]">Кого ищем</Heading>
+        <Heading level={2} className="flex-1 mt-[80px]">Кого мы ищем</Heading>
         <img src={olenSTOLSticker} alt="" className="w-48 h-48 object-contain drop-shadow-lg flex-shrink-0 scale-x-[-1]" />
       </div>
-      
+
       <Card className="relative z-10">
         <ul className="space-y-6">
           <li className="flex items-start gap-4">

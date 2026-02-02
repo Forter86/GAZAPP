@@ -19,7 +19,7 @@ export const BenefitsSection = () => {
   return (
     <section className="px-0 py-8 relative">
       <div className="px-6">
-        <Heading level={2} className="mb-8">Что ты получишь</Heading>
+        <Heading level={2} className="mb-8">Что ты получишь от трудоустройства</Heading>
       </div>
 
       <div className="flex flex-col gap-4 px-6">

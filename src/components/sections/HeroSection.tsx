@@ -15,7 +15,7 @@ export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
 
       <Heading level={1} className="mb-4">
         Работа <br />
-        <span className="text-[#4A90E2]">в ООО «Газпром Трансгаз Сургут»</span>
+        <span className="text-[#4A90E2]">в ООО «Газпром трансгаз Сургут»</span>
       </Heading>
 
       <p className="text-gray-600 text-lg mb-10 max-w-[280px]">
@@ -27,7 +27,7 @@ export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
         <div className="absolute inset-0 bg-white shadow-xl rounded-[40px] flex items-center justify-center p-6">
           <img
             src={gazpromLogo}
-            alt="Газпром Трансгаз Сургут"
+            alt="Газпром трансгаз Сургут"
             className="w-full h-full object-contain"
           />
         </div>
