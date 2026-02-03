@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# Large media files (add specific files manually if needed)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Specific large video file
+public/gzp_video.mp4
+
+# Large images (uncomment if needed)
+# *.jpg
+# *.jpeg
+# *.png
+# *.pdf
+
+# But allow specific files (use git add -f to force add)
+# !public/voprosi.txt
+# !src/assets/voprosi.txt
