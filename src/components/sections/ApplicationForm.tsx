@@ -53,7 +53,8 @@ export const ApplicationForm = ({
 
   const [internshipData, setInternshipData] = useState({
     region: '', fullName: '', email: '', educationType: '', institution: '',
-    specialization: '', branch: '', phone: '', additionalInfo: ''
+    specialization: '', branch: '', phone: '', additionalInfo: '',
+    course: '', internshipDateFrom: '', internshipDateTo: '', paidType: '', skills: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -93,6 +94,8 @@ export const ApplicationForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateDateDdMmYyyy = (s: string) => /^\d{2}\.\d{2}\.\d{4}$/.test(s.trim());
+
   const validateInternship = () => {
     const newErrors: Record<string, string> = {};
     if (!internshipData.region) newErrors.region = 'Выберите регион';
@@ -104,6 +107,12 @@ export const ApplicationForm = ({
     if (!internshipData.specialization.trim()) newErrors.specialization = 'Укажите направление';
     if (!internshipData.branch) newErrors.branch = 'Выберите филиал';
     if (!internshipData.phone.trim()) newErrors.phone = 'Введите телефон';
+    if (!internshipData.course) newErrors.course = 'Выберите курс';
+    if (!internshipData.internshipDateFrom.trim()) newErrors.internshipDateFrom = 'Укажите дату начала';
+    else if (!validateDateDdMmYyyy(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Формат: дд.мм.гггг';
+    if (!internshipData.internshipDateTo.trim()) newErrors.internshipDateTo = 'Укажите дату окончания';
+    else if (!validateDateDdMmYyyy(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Формат: дд.мм.гггг';
+    if (!internshipData.paidType) newErrors.paidType = 'Выберите тип стажировки';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -371,6 +380,61 @@ export const ApplicationForm = ({
       </div>
 
       <div>
+        <label className="label">Курс <span className="text-red-500">*</span></label>
+        <select
+          disabled={isSubmitting}
+          value={internshipData.course}
+          onChange={(e) => setInternshipData({ ...internshipData, course: e.target.value })}
+          className={`input-field ${errors.course ? 'border-red-500' : ''}`}
+        >
+          <option value="">Выберите курс</option>
+          {[1, 2, 3, 4, 5].map(n => <option key={n} value={String(n)}>{n}</option>)}
+        </select>
+        {errors.course && <p className="error-text">{errors.course}</p>}
+      </div>
+
+      <div>
+        <label className="label">Период стажировки <span className="text-red-500">*</span></label>
+        <div className="flex items-center gap-2 flex-wrap">
+          <input
+            disabled={isSubmitting}
+            type="text"
+            value={internshipData.internshipDateFrom}
+            onChange={(e) => setInternshipData({ ...internshipData, internshipDateFrom: e.target.value })}
+            className={`input-field flex-1 min-w-0 ${errors.internshipDateFrom ? 'border-red-500' : ''}`}
+            placeholder="с дд.мм.гггг"
+          />
+          <span className="text-gray-500 shrink-0">по</span>
+          <input
+            disabled={isSubmitting}
+            type="text"
+            value={internshipData.internshipDateTo}
+            onChange={(e) => setInternshipData({ ...internshipData, internshipDateTo: e.target.value })}
+            className={`input-field flex-1 min-w-0 ${errors.internshipDateTo ? 'border-red-500' : ''}`}
+            placeholder="дд.мм.гггг"
+          />
+        </div>
+        {(errors.internshipDateFrom || errors.internshipDateTo) && (
+          <p className="error-text">{errors.internshipDateFrom || errors.internshipDateTo}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="label">Тип стажировки <span className="text-red-500">*</span></label>
+        <select
+          disabled={isSubmitting}
+          value={internshipData.paidType}
+          onChange={(e) => setInternshipData({ ...internshipData, paidType: e.target.value })}
+          className={`input-field ${errors.paidType ? 'border-red-500' : ''}`}
+        >
+          <option value="">Выберите тип</option>
+          <option value="Платная">Платная</option>
+          <option value="Бесплатная">Бесплатная</option>
+        </select>
+        {errors.paidType && <p className="error-text">{errors.paidType}</p>}
+      </div>
+
+      <div>
         <label className="label">Филиал <span className="text-red-500">*</span></label>
         <select
           disabled={isSubmitting}
@@ -395,6 +459,18 @@ export const ApplicationForm = ({
           placeholder="+7 (999) 000-00-00"
         />
         {errors.phone && <p className="error-text">{errors.phone}</p>}
+      </div>
+
+      <div>
+        <label className="label">Описание навыков и умений</label>
+        <textarea
+          disabled={isSubmitting}
+          value={internshipData.skills}
+          onChange={(e) => setInternshipData({ ...internshipData, skills: e.target.value })}
+          rows={3}
+          className="input-field min-h-[80px] resize-none"
+          placeholder="Какие у вас есть навыки (можно не заполнять)"
+        />
       </div>
 
       <div>

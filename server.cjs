@@ -54,6 +54,9 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
             </div>
         `;
     } else if (type === 'internship') {
+        const periodStr = [data.internshipDateFrom, data.internshipDateTo].filter(Boolean).length
+            ? `с ${data.internshipDateFrom || '—'} по ${data.internshipDateTo || '—'}`
+            : '—';
         htmlContent = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
                 <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Заявка на практику</h2>
@@ -62,9 +65,13 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
                 <p><b>ВУЗ/СПО:</b> ${data.institution || '—'}</p>
                 <p><b>Тип образования:</b> ${data.educationType || '—'}</p>
                 <p><b>Специальность:</b> ${data.specialization || '—'}</p>
+                <p><b>Курс:</b> ${data.course || '—'}</p>
+                <p><b>Период стажировки:</b> ${periodStr}</p>
+                <p><b>Тип стажировки:</b> ${data.paidType || '—'}</p>
                 <p><b>Филиал:</b> ${data.branch || '—'}</p>
                 <p><b>Телефон:</b> ${data.phone || '—'}</p>
                 <p><b>Email:</b> ${data.email || '—'}</p>
+                <p><b>Навыки и умения:</b> ${data.skills ? data.skills : '—'}</p>
                 <p><b>Доп. инфо:</b> ${data.additionalInfo || '—'}</p>
             </div>
         `;
