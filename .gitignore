@@ -37,7 +37,7 @@ dist-ssr
 *.webm
 
 # Specific large video file
-public/gzp_video.mp4
+!public/gzp_video.mp4
 
 # Large images (uncomment if needed)
 # *.jpg

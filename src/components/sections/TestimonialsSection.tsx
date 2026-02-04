@@ -5,12 +5,16 @@ import alexandrPhoto from '../../assets/Alexandr.jpg';
 import denisPhoto from '../../assets/denis.jpg';
 import vadimPhoto from '../../assets/Vadim.jpg';
 import anastasiaPhoto from '../../assets/anastasia.jpg';
+import arturkaPhoto from '../../assets/Arturka.jpg';
+import deniskaPhoto from '../../assets/deniska.jpg';
 
 interface Testimonial {
   name: string;
   position: string;
   photo: string;
   text: string;
+  /** CSS object-position to adjust photo in circle (e.g. "center 35%") */
+  photoPosition?: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -37,6 +41,19 @@ const testimonials: Testimonial[] = [
     position: 'Инженер по подготовке кадров II категории',
     photo: anastasiaPhoto,
     text: 'После университета сразу попала в дружную команду Учебно-производственного центра. Назначили внимательного наставника, помогли освоиться и поверить в свои силы.\n\nРаботаю с обучением персонала — это и ответственно, и интересно.\n\nОчень довольна, что начала карьеру именно в ООО «Газпром трансгаз Сургут»!'
+  },
+  {
+    name: 'Азиев Артур',
+    position: 'Техник',
+    photo: arturkaPhoto,
+    text: 'Когда я пришёл сюда студентом, думал, что буду только кофе носить. Но сразу доверили реальный проект: создаём внутренний инструмент для команды. Наставники всегда готовы помочь, не бросают в беде.\n\nУчиться параллельно с работой? Легко! Компания идёт навстречу перед сессией, а практика сразу становится делом. Чувствуешь, что твой труд важен, а не просто «стажёр на побегушках».\n\nСовет ребятам из универа: здесь дают расти, если действительно хочешь работать.'
+  },
+  {
+    name: 'Лысенко Денис',
+    position: 'Техник',
+    photo: deniskaPhoto,
+    photoPosition: 'center 35%',
+    text: 'Я совмещаю учебу в вузе и работу техником, и это не создает проблем. Наоборот, теоретические знания из лекций сразу применяются на практике.\n\nС первого месяца меня включили в разработку проекта. Мне дали техническое задание и сказали: «Делай». Коллеги поддерживают, а наставник терпеливо отвечает на все вопросы.\n\nГибкий график позволяет мне успешно совмещать учебу и работу. Это идеальный вариант для студентов, которые хотят не только заработать, но и получить ценный опыт.'
   }
 ];
 
@@ -79,6 +96,7 @@ export const TestimonialsSection = () => {
                 src={currentTestimonial.photo}
                 alt={currentTestimonial.name}
                 className="w-20 h-20 rounded-full object-cover border-2 border-[#4A90E2] bg-gray-200"
+                style={currentTestimonial.photoPosition ? { objectPosition: currentTestimonial.photoPosition } : undefined}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentTestimonial.name)}&size=120&background=4A90E2&color=fff&bold=true`;

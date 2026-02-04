@@ -23,6 +23,61 @@ export const ProfessionSection = () => {
   const AUTOSCROLL_INTERVAL = 4000; // 4 секунды на слайд
   const progressRef = useRef<SVGCircleElement>(null);
 
+  // Drag-to-scroll state
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [hasMoved, setHasMoved] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    setIsMouseDown(true);
+    setIsPaused(true);
+    setHasMoved(false);
+    setStartX(e.pageX - container.offsetLeft);
+    setScrollLeft(container.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseDown(false);
+    if (!selectedProfession) setIsPaused(false);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    setIsMouseDown(false);
+    if (!selectedProfession) setIsPaused(false);
+
+    // If we moved significantly, prevent the click from triggering opening the modal
+    if (hasMoved) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 1.5; // Скорость прокрутки
+
+    if (Math.abs(walk) > 5) {
+      setHasMoved(true);
+    }
+
+    container.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleProfessionClick = (index: number) => {
+    // Only open if we weren't just dragging
+    if (!hasMoved) {
+      setSelectedProfession(index);
+    }
+  };
+
   const professions = [
     {
       icon: Fan,
@@ -181,19 +236,25 @@ export const ProfessionSection = () => {
       {/* Container with negative margin to allow full-bleed scroll while keeping padding for first item */}
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-4 no-scrollbar touch-pan-x items-stretch"
+        className={`flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-4 no-scrollbar touch-pan-x items-stretch ${isMouseDown ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        style={{ scrollBehavior: 'smooth' }}
+        onMouseEnter={() => !isMouseDown && setIsPaused(true)}
+        onMouseLeave={() => {
+          if (!isMouseDown) setIsPaused(false);
+          handleMouseLeave();
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        style={{ scrollBehavior: isMouseDown ? 'auto' : 'smooth' }}
       >
         {professions.map((profession, index) => {
           const Icon = profession.icon;
           return (
             <div
               key={index}
-              onClick={() => setSelectedProfession(index)}
+              onClick={() => handleProfessionClick(index)}
               className="snap-center shrink-0 w-[375px] cursor-pointer"
             >
               <Card

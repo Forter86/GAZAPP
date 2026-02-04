@@ -5,9 +5,10 @@ import { Send } from 'lucide-react';
 interface FinalCTASectionProps {
   onOpenForm: () => void;
   onOpenQuiz: () => void;
+  onOpenExcelTest: () => void;
 }
 
-export const FinalCTASection = ({ onOpenForm, onOpenQuiz }: FinalCTASectionProps) => {
+export const FinalCTASection = ({ onOpenForm, onOpenQuiz, onOpenExcelTest }: FinalCTASectionProps) => {
   return (
     <section className="px-6 py-20 bg-[#4A90E2] text-white text-center rounded-[40px]">
       <Heading level={2} className="mb-4">Готов начать карьеру?</Heading>
@@ -19,6 +20,14 @@ export const FinalCTASection = ({ onOpenForm, onOpenQuiz }: FinalCTASectionProps
       <div className="space-y-3 mb-8">
         <Button variant="secondary" className="w-full" onClick={onOpenForm}>
           Старт карьеры с нами
+        </Button>
+
+        <Button
+          variant="secondary"
+          className="w-full bg-white text-[#4A90E2] hover:bg-gray-100"
+          onClick={onOpenExcelTest}
+        >
+          Тест эксельки
         </Button>
 
         <button

@@ -266,6 +266,7 @@ function App() {
           <FinalCTASection
             onOpenForm={() => setIsFormOpen(true)}
             onOpenQuiz={() => setIsQuizOpen(true)}
+            onOpenExcelTest={() => setIsFormOpen(true)} // Currently reused isFormOpen, modal will handle branching
           />
         </div>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Heading } from '../atoms/Heading';
 import { Card } from '../atoms/Card';
 import {
@@ -418,6 +418,51 @@ export const KnowledgeSection = () => {
     const [activeCategory, setActiveCategory] = useState('about');
     const [selectedTopic, setSelectedTopic] = useState<SubTopic | null>(null);
 
+    // Drag-to-scroll state for categories
+    const categoriesRef = useRef<HTMLDivElement>(null);
+    const [isMouseDown, setIsMouseDown] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [hasMoved, setHasMoved] = useState(false);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!categoriesRef.current) return;
+        setIsMouseDown(true);
+        setHasMoved(false);
+        setStartX(e.pageX - categoriesRef.current.offsetLeft);
+        setScrollLeft(categoriesRef.current.scrollLeft);
+    };
+
+    const handleMouseLeave = () => {
+        setIsMouseDown(false);
+    };
+
+    const handleMouseUp = (e: React.MouseEvent) => {
+        setIsMouseDown(false);
+        if (hasMoved) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isMouseDown || !categoriesRef.current) return;
+        const x = e.pageX - categoriesRef.current.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll speed
+
+        if (Math.abs(walk) > 5) {
+            setHasMoved(true);
+        }
+
+        categoriesRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    const handleCategoryClick = (id: string) => {
+        if (!hasMoved) {
+            setActiveCategory(id);
+        }
+    };
+
     // Состояния для формы
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -548,15 +593,23 @@ export const KnowledgeSection = () => {
                     Узнай больше интересного о нас!
                 </Heading>
 
-                {/* Категории - горизонтальный скролл на мобилках */}
-                <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar mb-8 -mx-2 px-2">
+                {/* Категории - горизонтальный скролл на мобилках и десктопе */}
+                <div
+                    ref={categoriesRef}
+                    onMouseDown={handleMouseDown}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                    className={`flex overflow-x-auto pb-4 gap-3 no-scrollbar mb-8 -mx-2 px-2 ${isMouseDown ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+                    style={{ scrollBehavior: isMouseDown ? 'auto' : 'smooth' }}
+                >
                     {categories.map((cat) => {
                         const Icon = cat.icon;
                         const isActive = activeCategory === cat.id;
                         return (
                             <button
                                 key={cat.id}
-                                onClick={() => setActiveCategory(cat.id)}
+                                onClick={() => handleCategoryClick(cat.id)}
                                 className={`flex flex-col items-center justify-center min-w-[100px] p-3 rounded-2xl transition-all border-2 ${isActive
                                     ? 'bg-[#4A90E2] border-[#4A90E2] text-white shadow-lg shadow-blue-500/20'
                                     : 'bg-white border-transparent text-gray-500 hover:border-gray-200'

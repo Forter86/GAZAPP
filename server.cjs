@@ -34,9 +34,100 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
     let formTypeLabel = '💼 ТРУДОУСТРОЙСТВО';
     if (type === 'internship') formTypeLabel = '📍 ПРАКТИКА';
     else if (type === 'event') formTypeLabel = '🎉 МЕРОПРИЯТИЕ';
+    else if (type === 'excelTest') formTypeLabel = '📊 ТЕСТ ЭКСЕЛЬКИ';
 
     let htmlContent = '';
-    if (type === 'event') {
+    let attachments = [];
+
+    if (type === 'excelTest') {
+        const ExcelJS = require('exceljs');
+        const workbook = new ExcelJS.Workbook();
+        const templatePath = path.join(__dirname, 'public', 'anketa_soiskatelya.xlsx');
+
+        try {
+            await workbook.xlsx.readFile(templatePath);
+            const sheet = workbook.getWorksheet(1);
+
+            // Fill the cells (Column B is index 2)
+            sheet.getRow(6).getCell(2).value = data.lastName;
+            sheet.getRow(7).getCell(2).value = data.firstName;
+            sheet.getRow(8).getCell(2).value = data.patronymic;
+            sheet.getRow(9).getCell(2).value = data.birthDate;
+            sheet.getRow(10).getCell(2).value = data.gender;
+            sheet.getRow(11).getCell(2).value = data.citizenship;
+            sheet.getRow(13).getCell(2).value = data.regAddress;
+            sheet.getRow(14).getCell(2).value = data.factAddress || data.regAddress;
+            sheet.getRow(15).getCell(2).value = data.vacancy;
+            sheet.getRow(16).getCell(2).value = data.education;
+            sheet.getRow(17).getCell(2).value = data.educationDetail;
+            sheet.getRow(18).getCell(2).value = data.certificates;
+            sheet.getRow(19).getCell(2).value = data.experience;
+            sheet.getRow(20).getCell(2).value = data.relocation;
+
+            // Relocation row-based checkmarks (V)
+            const relocationMap = {
+                'Не готов': 21,
+                'Готов к переезду в любое место': 22,
+                'Готов к переезду в ЯНАО Новый Уренгой': 23,
+                'Готов к переезду в ЯНАО Ноябрьск': 24,
+                'Готов к переезду в ЯНАО п. Ханымей': 25,
+                'Готов к переезду в ЯНАО г. Губкинский': 26,
+                'Готов к переезду в ХМАО г. Сургут': 27,
+                'Готов к переезду в ХМАО г. Когалым': 28,
+                'Готов к переезду в ХМАО г. Нефтеюганск, Пыть-Ях': 29,
+                'Готов к переезду в ХМАО п. Салым': 30,
+                'Готов к переезду в Уватский р-н Тюменской области (МКС)': 31,
+                'Готов к переезду в Тобольск и Тобольский р-н Тюменской области': 32,
+                'Готов к переезду в г. Тюмень': 33,
+                'Готов к переезду в г. Ишим Тюменской области': 34,
+                'Готов к переезду в Ярковский район Тюменской области': 35
+            };
+
+            const targetRow = relocationMap[data.relocation];
+            if (targetRow) {
+                sheet.getRow(targetRow).getCell(2).value = 'V';
+            }
+
+            // Shift work checkmark (Row 36)
+            if (data.shiftWork) {
+                sheet.getRow(36).getCell(2).value = 'V';
+            }
+
+            sheet.getRow(37).getCell(2).value = data.additionalInfoDetailed;
+            sheet.getRow(38).getCell(2).value = data.email;
+            sheet.getRow(39).getCell(2).value = data.phone;
+            sheet.getRow(40).getCell(2).value = new Date().toLocaleDateString('ru-RU');
+            sheet.getRow(43).getCell(2).value = 'Даю согласие';
+
+            const buffer = await workbook.xlsx.writeBuffer();
+
+            // Generate filename: anketa_LastName_I_O.xlsx
+            const L = data.lastName || 'unknown';
+            const F = data.firstName ? data.firstName[0] : '';
+            const P = data.patronymic ? data.patronymic[0] : '';
+            const filename = `anketa_${L}${F}${P}.xlsx`;
+
+            attachments.push({
+                filename: filename,
+                content: buffer
+            });
+
+            htmlContent = `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
+                    <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Полная анкета соискателя (Excel)</h2>
+                    <p><b>ФИО:</b> ${data.lastName} ${data.firstName} ${data.patronymic || ''}</p>
+                    <p><b>Вакансия:</b> ${data.vacancy}</p>
+                    <p><b>Email:</b> ${data.email}</p>
+                    <p><b>Телефон:</b> ${data.phone}</p>
+                    <p><i>Заполненная анкета прикреплена к письму.</i></p>
+                </div>
+            `;
+        } catch (err) {
+            console.error('Excel processing error:', err);
+            // Fallback if excel fails
+            htmlContent = `<p>Ошибка при создании Excel файла. Данные: ${JSON.stringify(data)}</p>`;
+        }
+    } else if (type === 'event') {
         htmlContent = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
                 <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Заявка на мероприятие</h2>
@@ -54,6 +145,9 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
             </div>
         `;
     } else if (type === 'internship') {
+        const periodStr = [data.internshipDateFrom, data.internshipDateTo].filter(Boolean).length
+            ? `с ${data.internshipDateFrom || '—'} по ${data.internshipDateTo || '—'}`
+            : '—';
         htmlContent = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
                 <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Заявка на практику</h2>
@@ -62,9 +156,13 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
                 <p><b>ВУЗ/СПО:</b> ${data.institution || '—'}</p>
                 <p><b>Тип образования:</b> ${data.educationType || '—'}</p>
                 <p><b>Специальность:</b> ${data.specialization || '—'}</p>
+                <p><b>Курс:</b> ${data.course || '—'}</p>
+                <p><b>Период стажировки:</b> ${periodStr}</p>
+                <p><b>Тип стажировки:</b> ${data.paidType || '—'}</p>
                 <p><b>Филиал:</b> ${data.branch || '—'}</p>
                 <p><b>Телефон:</b> ${data.phone || '—'}</p>
                 <p><b>Email:</b> ${data.email || '—'}</p>
+                <p><b>Навыки и умения:</b> ${data.skills ? data.skills : '—'}</p>
                 <p><b>Доп. инфо:</b> ${data.additionalInfo || '—'}</p>
             </div>
         `;
@@ -104,8 +202,9 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
         await transporter.sendMail({
             from: `"Газпром Бот" <${EMAIL_CONFIG.email}>`,
             to: EMAIL_CONFIG.recipient,
-            subject: `Заявка: ${formTypeLabel} - ${data.fullName || 'Без имени'}`,
-            html: htmlContent
+            subject: `Заявка: ${formTypeLabel} - ${data.fullName || (data.lastName ? data.lastName + ' ' + data.firstName : 'Без имени')}`,
+            html: htmlContent,
+            attachments: attachments
         });
         console.log('✅ Email успешно отправлен');
         res.json({ success: true, message: 'Заявка отправлена!' });
