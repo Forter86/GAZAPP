@@ -14,6 +14,7 @@ COPY server.cjs .
 
 # Copy pre-built frontend (You must upload 'dist' folder to server!)
 COPY dist ./dist
+COPY public ./public
 
 # Expose port
 EXPOSE 3001
