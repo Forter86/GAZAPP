@@ -14,7 +14,7 @@ export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
       <div className="absolute top-40 -left-10 w-32 h-32 bg-[#4A90E2] rounded-full blur-3xl opacity-10 -z-10" />
 
       <Heading level={1} className="mb-4">
-        Работа <br />
+        Карьера <br />
         <span className="text-[#4A90E2]">в ООО «Газпром трансгаз Сургут»</span>
       </Heading>
 
@@ -39,3 +39,4 @@ export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
     </section>
   );
 };
+
