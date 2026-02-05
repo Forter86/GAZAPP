@@ -29,7 +29,7 @@ export const AboutSection = () => {
         />
         <FeatureCard 
           icon={Users}
-          title="Профессиональный рост"
+          title="Культура развития и роста"
           description="Возможности для карьерного роста, обучения и повышения квалификации за счет компании."
           iconColor="text-[#708090]"
         />

@@ -147,11 +147,9 @@ export const ApplicationForm = ({
     if (!internshipData.phone.trim()) newErrors.phone = 'Введите телефон';
     if (!internshipData.course) newErrors.course = 'Выберите курс';
     if (!internshipData.internshipDateFrom.trim()) newErrors.internshipDateFrom = 'Укажите дату начала';
-    else if (!validateDateDdMmYyyy(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Формат: дд.мм.гггг';
-    else if (!isValidCalendarDate(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Некорректная дата';
+    else if (!validateDateDdMmYyyy(internshipData.internshipDateFrom) || !isValidCalendarDate(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Неправильная дата';
     if (!internshipData.internshipDateTo.trim()) newErrors.internshipDateTo = 'Укажите дату окончания';
-    else if (!validateDateDdMmYyyy(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Формат: дд.мм.гггг';
-    else if (!isValidCalendarDate(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Некорректная дата';
+    else if (!validateDateDdMmYyyy(internshipData.internshipDateTo) || !isValidCalendarDate(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Неправильная дата';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
