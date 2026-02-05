@@ -35,7 +35,7 @@ const educationOptions = [
 
 const regions = ['ХМАО', 'ЯНАО', 'Тюменская область'];
 const educationTypes = ['СПО (Среднее профессиональное)', 'ВУЗ (Высшее образование)'];
-const branches = ['Сургутский филиал', 'Новоуренгойский филиал', 'Тюменский филиал', 'Краснодарский филиал'];
+const branches = ['Сургутский филиал', 'Ново-Уренгойский филиал', 'Тюменский филиал', 'Краснодарский филиал'];
 
 const relocationDetailedOptions = [
   'Не готов',
@@ -75,7 +75,8 @@ export const ApplicationForm = ({
   const [internshipData, setInternshipData] = useState({
     region: '', fullName: '', email: '', educationType: '', institution: '',
     specialization: '', branch: '', phone: '', additionalInfo: '',
-    course: '', internshipDateFrom: '', internshipDateTo: '', skills: ''
+    course: '', internshipDateFrom: '', internshipDateTo: '', skills: '',
+    competitions: '', sports: '', publications: ''
   });
 
   const [excelTestData, setExcelTestData] = useState({
@@ -88,6 +89,29 @@ export const ApplicationForm = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [consentGiven, setConsentGiven] = useState(false);
   const [consentError, setConsentError] = useState('');
+
+  const formatDateInput = (value: string) => {
+    // Убираем всё, кроме цифр
+    let digits = value.replace(/\D/g, '').slice(0, 8);
+
+    // Форматируем день (не больше 31)
+    if (digits.length >= 2) {
+      let day = parseInt(digits.slice(0, 2));
+      if (day > 31) digits = '31' + digits.slice(2);
+      if (day === 0 && digits.length === 2) digits = '01'; // Не даем ввести 00
+      digits = digits.slice(0, 2) + '.' + digits.slice(2);
+    }
+
+    // Форматируем месяц (не больше 12)
+    if (digits.length >= 5) {
+      let month = parseInt(digits.slice(3, 5));
+      if (month > 12) digits = digits.slice(0, 3) + '12' + digits.slice(5);
+      if (month === 0 && digits.length === 5) digits = digits.slice(0, 3) + '01'; // Не даем ввести 00
+      digits = digits.slice(0, 5) + '.' + digits.slice(5);
+    }
+
+    return digits;
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -393,7 +417,14 @@ export const ApplicationForm = ({
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="label">Дата рождения <span className="text-red-500">*</span></label>
-          <input disabled={isSubmitting} type="text" value={excelTestData.birthDate} onChange={(e) => setExcelTestData({ ...excelTestData, birthDate: e.target.value })} className={`input-field ${errors.birthDate ? 'border-red-500' : ''}`} placeholder="дд.мм.гггг" />
+          <input
+            disabled={isSubmitting}
+            type="text"
+            value={excelTestData.birthDate}
+            onChange={(e) => setExcelTestData({ ...excelTestData, birthDate: formatDateInput(e.target.value) })}
+            className={`input-field ${errors.birthDate ? 'border-red-500' : ''}`}
+            placeholder="дд.мм.гггг"
+          />
           {errors.birthDate && <p className="error-text">{errors.birthDate}</p>}
         </div>
         <div>
@@ -607,7 +638,7 @@ export const ApplicationForm = ({
             disabled={isSubmitting}
             type="text"
             value={internshipData.internshipDateFrom}
-            onChange={(e) => setInternshipData({ ...internshipData, internshipDateFrom: e.target.value })}
+            onChange={(e) => setInternshipData({ ...internshipData, internshipDateFrom: formatDateInput(e.target.value) })}
             className={`input-field flex-1 min-w-0 ${errors.internshipDateFrom ? 'border-red-500' : ''}`}
             placeholder="с дд.мм.гггг"
           />
@@ -616,7 +647,7 @@ export const ApplicationForm = ({
             disabled={isSubmitting}
             type="text"
             value={internshipData.internshipDateTo}
-            onChange={(e) => setInternshipData({ ...internshipData, internshipDateTo: e.target.value })}
+            onChange={(e) => setInternshipData({ ...internshipData, internshipDateTo: formatDateInput(e.target.value) })}
             className={`input-field flex-1 min-w-0 ${errors.internshipDateTo ? 'border-red-500' : ''}`}
             placeholder="дд.мм.гггг"
           />
@@ -661,7 +692,43 @@ export const ApplicationForm = ({
           onChange={(e) => setInternshipData({ ...internshipData, skills: e.target.value })}
           rows={3}
           className="input-field min-h-[80px] resize-none"
-          placeholder="Какие у вас есть навыки (можно не заполнять)"
+          placeholder="Какие у вас есть навыки"
+        />
+      </div>
+
+      <div>
+        <label className="label">В каких конкурсах принимали участие?</label>
+        <textarea
+          disabled={isSubmitting}
+          value={internshipData.competitions}
+          onChange={(e) => setInternshipData({ ...internshipData, competitions: e.target.value })}
+          rows={3}
+          className="input-field min-h-[80px] resize-none"
+          placeholder="Перечислите конкурсы..."
+        />
+      </div>
+
+      <div>
+        <label className="label">Какие у вас спортивные достижения?</label>
+        <textarea
+          disabled={isSubmitting}
+          value={internshipData.sports}
+          onChange={(e) => setInternshipData({ ...internshipData, sports: e.target.value })}
+          rows={3}
+          className="input-field min-h-[80px] resize-none"
+          placeholder="Ваши достижения в спорте..."
+        />
+      </div>
+
+      <div>
+        <label className="label">Какие у вас имеются статьи, публикации?</label>
+        <textarea
+          disabled={isSubmitting}
+          value={internshipData.publications}
+          onChange={(e) => setInternshipData({ ...internshipData, publications: e.target.value })}
+          rows={3}
+          className="input-field min-h-[80px] resize-none"
+          placeholder="Статьи, публикации, научные работы..."
         />
       </div>
 

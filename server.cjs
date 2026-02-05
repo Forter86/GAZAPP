@@ -163,6 +163,9 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
                 <p><b>Телефон:</b> ${data.phone || '—'}</p>
                 <p><b>Email:</b> ${data.email || '—'}</p>
                 <p><b>Навыки и умения:</b> ${data.skills ? data.skills : '—'}</p>
+                <p><b>Участие в конкурсах:</b> ${data.competitions || '—'}</p>
+                <p><b>Спортивные достижения:</b> ${data.sports || '—'}</p>
+                <p><b>Статьи и публикации:</b> ${data.publications || '—'}</p>
                 <p><b>Доп. инфо:</b> ${data.additionalInfo || '—'}</p>
             </div>
         `;

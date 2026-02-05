@@ -7,6 +7,7 @@ import vadimPhoto from '../../assets/Vadim.jpg';
 import anastasiaPhoto from '../../assets/anastasia.jpg';
 import arturkaPhoto from '../../assets/Arturka.jpg';
 import deniskaPhoto from '../../assets/deniska.jpg';
+import valentinPhoto from '../../assets/svarchik.jpg';
 
 interface Testimonial {
   name: string;
@@ -15,6 +16,10 @@ interface Testimonial {
   text: string;
   /** CSS object-position to adjust photo in circle (e.g. "center 35%") */
   photoPosition?: string;
+  /** Scale factor for zooming in (e.g. 1.5) */
+  photoScale?: number;
+  /** Vertical translation (e.g. "10%") */
+  photoTranslateY?: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -54,6 +59,15 @@ const testimonials: Testimonial[] = [
     photo: deniskaPhoto,
     photoPosition: 'center 35%',
     text: 'Я совмещаю учебу в вузе и работу техником, и это не создает проблем. Наоборот, теоретические знания из лекций сразу применяются на практике.\n\nС первого месяца меня включили в разработку проекта. Мне дали техническое задание и сказали: «Делай». Коллеги поддерживают, а наставник терпеливо отвечает на все вопросы.\n\nГибкий график позволяет мне успешно совмещать учебу и работу. Это идеальный вариант для студентов, которые хотят не только заработать, но и получить ценный опыт.'
+  },
+  {
+    name: 'Ольховский Валентин',
+    position: 'Сварщик Управления аварийно-восстановительных работ',
+    photo: valentinPhoto,
+    photoPosition: 'center 10%',
+    photoScale: 1.6,
+    photoTranslateY: '20%',
+    text: 'Работа в ООО «Газпром трансгаз Сургут» — это отличная возможность проявить себя на самом высоком уровне.\n\nЯ горжусь тем, что уже третий год подряд подтверждаю статус профессионала и вхожу в число лучших сварщиков России. В нашем Управлении аварийно-восстановительных работ мы ценим точность и мастерство.\n\nКомпания предоставляет всё необходимое для роста: современное оборудование, поддержку коллег и достойные условия. Если ты хочешь быть лучшим в своем деле — это правильное место!'
   }
 ];
 
@@ -91,12 +105,15 @@ export const TestimonialsSection = () => {
         <div className="bg-white rounded-[40px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] mb-8">
           <div className="flex gap-4 items-start">
             {/* Фото слева */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 w-20 h-20 rounded-full overflow-hidden border-2 border-[#4A90E2] bg-gray-200 relative">
               <img
                 src={currentTestimonial.photo}
                 alt={currentTestimonial.name}
-                className="w-20 h-20 rounded-full object-cover border-2 border-[#4A90E2] bg-gray-200"
-                style={currentTestimonial.photoPosition ? { objectPosition: currentTestimonial.photoPosition } : undefined}
+                className="w-full h-full object-cover transition-transform duration-500"
+                style={{
+                  objectPosition: currentTestimonial.photoPosition || 'center',
+                  transform: `scale(${currentTestimonial.photoScale || 1}) translateY(${currentTestimonial.photoTranslateY || '0'})`
+                }}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentTestimonial.name)}&size=120&background=4A90E2&color=fff&bold=true`;

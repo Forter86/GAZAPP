@@ -17,7 +17,9 @@ import {
     CheckCircle2,
     XCircle,
     School,
-    FileText
+    FileText,
+    MapPin,
+    ArrowLeft
 } from 'lucide-react';
 
 import aboutMainImg from '../../assets/about_company/main.jpg';
@@ -72,21 +74,40 @@ const subTopics: SubTopic[] = [
         content: `📜 История компании
 
 ООО «Газпром трансгаз Сургут»
-100% дочернее предприятие ПАО «Газпром»
-Основано 23 февраля 1977 года
+ Это 100% дочернее предприятие ПАО «Газпром» с богатой историей и стратегическим значением
+🗓 Дата основания: 23 февраля 1977 года
+🏢 Штаб-квартира: г. Сургут
 
-📍 География деятельности:
-• Ямало-Ненецкий автономный округ
-• Ханты-Мансийский автономный округ — Югра  
-• Тюменская область
-Административный центр — г. Сургут
+История предприятия неразрывно связана с великой летописью освоения нефтегазовой Сибири.`,
+        links: [
+            { text: '📍 Где мы работаем?', url: 'internal:where_we_work' },
+            { text: '🏗 Ключевые достижения 🏆', url: 'internal:key_projects' }
+        ]
+    },
+    {
+        id: 'where_we_work',
+        category: 'hidden',
+        title: 'Где мы работаем?',
+        icon: MapPin,
+        content: `📍 Где мы работаем?
+Масштабы нашей деятельности охватывают ключевые регионы России:
+ • ЯНАО (Ямало-Ненецкий автономный округ)
+ • ХМАО — Югра
+ • Тюменская область
+ • Краснодарский край
+Административный центр управления — город Сургут.`
+    },
+    {
+        id: 'key_projects',
+        category: 'hidden',
+        title: 'Ключевые достижения',
+        icon: Award,
+        content: `🏗 Исторические проекты
 
-Ключевые исторические проекты:
-• Строительство магистральных газопроводов «Заполярное — Уренгой» и «Уренгой — Сургут — Челябинск»
-• Освоение крупных газовых месторождений: Вынгапуровское, Комсомольское, Губкинское, Заполярное
-• Создание завода по стабилизации конденсата в Сургутском районе
-
-История предприятия вписана в летопись освоения нефтегазовой Сибири`
+Мы стояли у истоков создания крупнейшей газотранспортной сети:
+ • Магистрали: Строительство газопроводов «Заполярное — Уренгой» и «Уренгой — Сургут — Челябинск».
+ • Месторождения: Промышленное освоение Вынгапуровского, Комсомольского, Губкинского и Заполярного месторождений.
+ • Переработка: Создание уникального завода по стабилизации конденсата в Сургутском районе.`
     },
     {
         id: 'mission',
@@ -737,9 +758,22 @@ export const KnowledgeSection = () => {
                                 <div className="w-10 h-10 rounded-xl bg-[#4A90E2]/10 text-[#4A90E2] flex items-center justify-center">
                                     <selectedTopic.icon size={20} />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 leading-tight">
-                                    {isSubmitting ? 'Минутку...' : submitStatus !== 'idle' ? 'Статус' : selectedTopic.title}
-                                </h3>
+                                <div className="flex flex-col">
+                                    <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                                        {isSubmitting ? 'Минутку...' : submitStatus !== 'idle' ? 'Статус' : selectedTopic.title}
+                                    </h3>
+                                    {selectedTopic.category === 'hidden' && (
+                                        <button
+                                            onClick={() => {
+                                                const historyTopic = subTopics.find(t => t.id === 'history');
+                                                if (historyTopic) setSelectedTopic(historyTopic);
+                                            }}
+                                            className="text-[10px] font-bold text-[#4A90E2] uppercase flex items-center gap-1 mt-1 hover:underline"
+                                        >
+                                            <ArrowLeft size={10} /> Назад в историю
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                             {!isSubmitting && (
                                 <button
@@ -864,18 +898,34 @@ export const KnowledgeSection = () => {
                         {/* Links Section */}
                         {selectedTopic.links && submitStatus === 'idle' && !isSubmitting && (
                             <div className="px-8 pb-8 space-y-3">
-                                {selectedTopic.links.map((link, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={link.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-between p-4 rounded-2xl bg-blue-50 text-[#4A90E2] font-bold hover:bg-blue-100 transition-all group"
-                                    >
-                                        <span className="flex-1">{link.text}</span>
-                                        <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                    </a>
-                                ))}
+                                {selectedTopic.links.map((link, idx) => {
+                                    const isInternal = link.url.startsWith('internal:');
+                                    const ContentWrapper = isInternal ? 'button' : 'a';
+                                    const wrapperProps = isInternal
+                                        ? {
+                                            onClick: () => {
+                                                const targetId = link.url.replace('internal:', '');
+                                                const targetTopic = subTopics.find(t => t.id === targetId);
+                                                if (targetTopic) setSelectedTopic(targetTopic);
+                                            }
+                                        }
+                                        : {
+                                            href: link.url,
+                                            target: "_blank",
+                                            rel: "noopener noreferrer"
+                                        };
+
+                                    return (
+                                        <ContentWrapper
+                                            key={idx}
+                                            {...wrapperProps}
+                                            className="flex items-center justify-between p-4 rounded-2xl bg-blue-50 text-[#4A90E2] font-bold hover:bg-blue-100 transition-all group text-left"
+                                        >
+                                            <span className="flex-1">{link.text}</span>
+                                            <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                                        </ContentWrapper>
+                                    );
+                                })}
                             </div>
                         )}
 
