@@ -122,12 +122,12 @@ export const ApplicationForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateDateDdMmYyyy = (s: string) => /^\d{2}\.\d{2}\.\d{4}$/.test(s.trim());
+  // Format: dd.mm.yyyy, day 01-31, month 01-12 (rejects 33.33.3333 etc.)
+  const validateDateDdMmYyyy = (s: string) => /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/.test(s.trim());
 
   const isValidCalendarDate = (s: string): boolean => {
     if (!validateDateDdMmYyyy(s)) return false;
     const [dd, mm, yyyy] = s.trim().split('.').map(Number);
-    if (mm < 1 || mm > 12) return false;
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const febDays = (yyyy % 4 === 0 && yyyy % 100 !== 0) || yyyy % 400 === 0 ? 29 : 28;
     const maxDay = mm === 2 ? febDays : daysInMonth[mm - 1];
