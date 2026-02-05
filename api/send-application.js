@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import path from 'path';
+import { readFile } from 'fs/promises';
 
 const EMAIL_CONFIG = {
   smtp_server: 'smtp.mail.ru',
@@ -6,7 +8,8 @@ const EMAIL_CONFIG = {
   email: 'gazprom_zayavki_bot@mail.ru',
   password: 'LF7DuDrO3ON6dbvz55R7',
   recipient: 'arturex414@gmail.com',
-  recipientResume: 'resume@surgut.gazprom.ru'
+  recipientResume: 'resume@surgut.gazprom.ru',
+  recipientDen: 'den-lisenko04@yandex.ru'
 };
 
 const transporter = nodemailer.createTransport({
@@ -22,6 +25,7 @@ const transporter = nodemailer.createTransport({
 function getFormTypeLabel(type) {
   if (type === 'internship') return 'ПРАКТИКА';
   if (type === 'event') return 'МЕРОПРИЯТИЕ';
+  if (type === 'excelTest') return 'ТЕСТ ЭКСЕЛЬКИ';
   return 'ТРУДОУСТРОЙСТВО';
 }
 
@@ -102,6 +106,77 @@ function buildEmailContent(data) {
   };
 }
 
+const relocationMap = {
+  'Не готов': 21,
+  'Готов к переезду в любое место': 22,
+  'Готов к переезду в ЯНАО Новый Уренгой': 23,
+  'Готов к переезду в ЯНАО Ноябрьск': 24,
+  'Готов к переезду в ЯНАО п. Ханымей': 25,
+  'Готов к переезду в ЯНАО г. Губкинский': 26,
+  'Готов к переезду в ХМАО г. Сургут': 27,
+  'Готов к переезду в ХМАО г. Когалым': 28,
+  'Готов к переезду в ХМАО г. Нефтеюганск, Пыть-Ях': 29,
+  'Готов к переезду в ХМАО п. Салым': 30,
+  'Готов к переезду в Уватский р-н Тюменской области (МКС)': 31,
+  'Готов к переезду в Тобольск и Тобольский р-н Тюменской области': 32,
+  'Готов к переезду в г. Тюмень': 33,
+  'Готов к переезду в г. Ишим Тюменской области': 34,
+  'Готов к переезду в Ярковский район Тюменской области': 35
+};
+
+async function buildExcelTestEmail(data) {
+  const ExcelJS = (await import('exceljs')).default;
+  const templatePath = path.join(process.cwd(), 'public', 'anketa_soiskatelya.xlsx');
+  const templateBuffer = await readFile(templatePath);
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(templateBuffer);
+  const sheet = workbook.getWorksheet(1);
+
+  sheet.getRow(6).getCell(2).value = data.lastName;
+  sheet.getRow(7).getCell(2).value = data.firstName;
+  sheet.getRow(8).getCell(2).value = data.patronymic;
+  sheet.getRow(9).getCell(2).value = data.birthDate;
+  sheet.getRow(10).getCell(2).value = data.gender;
+  sheet.getRow(11).getCell(2).value = data.citizenship;
+  sheet.getRow(13).getCell(2).value = data.regAddress;
+  sheet.getRow(14).getCell(2).value = data.factAddress || data.regAddress;
+  sheet.getRow(15).getCell(2).value = data.vacancy;
+  sheet.getRow(16).getCell(2).value = data.education;
+  sheet.getRow(17).getCell(2).value = data.educationDetail;
+  sheet.getRow(18).getCell(2).value = data.certificates;
+  sheet.getRow(19).getCell(2).value = data.experience;
+  sheet.getRow(20).getCell(2).value = data.relocation;
+
+  const targetRow = relocationMap[data.relocation];
+  if (targetRow) sheet.getRow(targetRow).getCell(2).value = 'V';
+  if (data.shiftWork) sheet.getRow(36).getCell(2).value = 'V';
+
+  sheet.getRow(37).getCell(2).value = data.additionalInfoDetailed;
+  sheet.getRow(38).getCell(2).value = data.email;
+  sheet.getRow(39).getCell(2).value = data.phone;
+  sheet.getRow(40).getCell(2).value = new Date().toLocaleDateString('ru-RU');
+  sheet.getRow(43).getCell(2).value = 'Даю согласие';
+
+  const outBuffer = await workbook.xlsx.writeBuffer();
+  const L = data.lastName || 'unknown';
+  const F = data.firstName ? data.firstName[0] : '';
+  const P = data.patronymic ? data.patronymic[0] : '';
+  const filename = `anketa_${L}${F}${P}.xlsx`;
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
+      <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Полная анкета соискателя (Excel)</h2>
+      <p><b>ФИО:</b> ${data.lastName} ${data.firstName} ${data.patronymic || ''}</p>
+      <p><b>Вакансия:</b> ${data.vacancy}</p>
+      <p><b>Email:</b> ${data.email}</p>
+      <p><b>Телефон:</b> ${data.phone}</p>
+      <p><i>Заполненная анкета прикреплена к письму.</i></p>
+    </div>
+  `;
+  const subject = `Заявка: ${getFormTypeLabel('excelTest')} - ${data.lastName} ${data.firstName}`;
+  return { subject, html, attachments: [{ filename, content: outBuffer }] };
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -118,13 +193,27 @@ export default async function handler(req, res) {
   try {
     const data = req.body;
     const type = data.type || 'employment';
-    const { subject, html } = buildEmailContent(data);
+    const to = [EMAIL_CONFIG.recipient, EMAIL_CONFIG.recipientResume, EMAIL_CONFIG.recipientDen].join(', ');
+    const from = `"Газпром трансгаз Сургут" <${EMAIL_CONFIG.email}>`;
+
+    let subject, html, attachments = [];
+    if (type === 'excelTest') {
+      const payload = await buildExcelTestEmail(data);
+      subject = payload.subject;
+      html = payload.html;
+      attachments = payload.attachments || [];
+    } else {
+      const content = buildEmailContent(data);
+      subject = content.subject;
+      html = content.html;
+    }
 
     const mailOptions = {
-      from: `"Газпром трансгаз Сургут" <${EMAIL_CONFIG.email}>`,
-      to: [EMAIL_CONFIG.recipient, EMAIL_CONFIG.recipientResume].join(', '),
+      from,
+      to,
       subject,
-      html
+      html,
+      ...(attachments.length ? { attachments } : {})
     };
 
     const info = await transporter.sendMail(mailOptions);
