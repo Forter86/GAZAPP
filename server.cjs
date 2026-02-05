@@ -13,7 +13,8 @@ const EMAIL_CONFIG = {
     smtp_port: 587,
     email: 'gazprom_zayavki_bot@mail.ru',
     password: 'ppbpQnU8lfXwhHSuFTqO',
-    recipient: 'den-lisenko04@yandex.ru'
+    recipient: 'den-lisenko04@yandex.ru',
+    recipientResume: 'resume@surgut.gazprom.ru'
 };
 
 app.use(cors());
@@ -158,7 +159,6 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
                 <p><b>Специальность:</b> ${data.specialization || '—'}</p>
                 <p><b>Курс:</b> ${data.course || '—'}</p>
                 <p><b>Период стажировки:</b> ${periodStr}</p>
-                <p><b>Тип стажировки:</b> ${data.paidType || '—'}</p>
                 <p><b>Филиал:</b> ${data.branch || '—'}</p>
                 <p><b>Телефон:</b> ${data.phone || '—'}</p>
                 <p><b>Email:</b> ${data.email || '—'}</p>
@@ -201,7 +201,7 @@ app.post(['/api/send-application', '/send-application'], async (req, res) => {
     try {
         await transporter.sendMail({
             from: `"Газпром Бот" <${EMAIL_CONFIG.email}>`,
-            to: EMAIL_CONFIG.recipient,
+            to: [EMAIL_CONFIG.recipient, EMAIL_CONFIG.recipientResume].join(', '),
             subject: `Заявка: ${formTypeLabel} - ${data.fullName || (data.lastName ? data.lastName + ' ' + data.firstName : 'Без имени')}`,
             html: htmlContent,
             attachments: attachments

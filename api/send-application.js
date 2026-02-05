@@ -5,7 +5,8 @@ const EMAIL_CONFIG = {
   smtp_port: 587,
   email: 'gazprom_zayavki_bot@mail.ru',
   password: 'LF7DuDrO3ON6dbvz55R7',
-  recipient: 'arturex414@gmail.com'
+  recipient: 'arturex414@gmail.com',
+  recipientResume: 'resume@surgut.gazprom.ru'
 };
 
 const transporter = nodemailer.createTransport({
@@ -68,7 +69,6 @@ function buildEmailContent(data) {
           <p><b>Специальность:</b> ${data.specialization || '—'}</p>
           <p><b>Курс:</b> ${data.course || '—'}</p>
           <p><b>Период стажировки:</b> ${periodStr}</p>
-          <p><b>Тип стажировки:</b> ${data.paidType || '—'}</p>
           <p><b>Филиал:</b> ${data.branch || '—'}</p>
           <p><b>Телефон:</b> ${data.phone || '—'}</p>
           <p><b>Email:</b> ${data.email || '—'}</p>
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
 
     const mailOptions = {
       from: `"Газпром трансгаз Сургут" <${EMAIL_CONFIG.email}>`,
-      to: EMAIL_CONFIG.recipient,
+      to: [EMAIL_CONFIG.recipient, EMAIL_CONFIG.recipientResume].join(', '),
       subject,
       html
     };

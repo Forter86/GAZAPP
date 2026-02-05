@@ -75,7 +75,7 @@ export const ApplicationForm = ({
   const [internshipData, setInternshipData] = useState({
     region: '', fullName: '', email: '', educationType: '', institution: '',
     specialization: '', branch: '', phone: '', additionalInfo: '',
-    course: '', internshipDateFrom: '', internshipDateTo: '', paidType: '', skills: ''
+    course: '', internshipDateFrom: '', internshipDateTo: '', skills: ''
   });
 
   const [excelTestData, setExcelTestData] = useState({
@@ -140,8 +140,6 @@ export const ApplicationForm = ({
     else if (!validateDateDdMmYyyy(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Формат: дд.мм.гггг';
     if (!internshipData.internshipDateTo.trim()) newErrors.internshipDateTo = 'Укажите дату окончания';
     else if (!validateDateDdMmYyyy(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Формат: дд.мм.гггг';
-    if (!internshipData.paidType) newErrors.paidType = 'Выберите тип стажировки';
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -616,21 +614,6 @@ export const ApplicationForm = ({
         {(errors.internshipDateFrom || errors.internshipDateTo) && (
           <p className="error-text">{errors.internshipDateFrom || errors.internshipDateTo}</p>
         )}
-      </div>
-
-      <div>
-        <label className="label">Тип стажировки <span className="text-red-500">*</span></label>
-        <select
-          disabled={isSubmitting}
-          value={internshipData.paidType}
-          onChange={(e) => setInternshipData({ ...internshipData, paidType: e.target.value })}
-          className={`input-field ${errors.paidType ? 'border-red-500' : ''}`}
-        >
-          <option value="">Выберите тип</option>
-          <option value="Платная">Платная</option>
-          <option value="Бесплатная">Бесплатная</option>
-        </select>
-        {errors.paidType && <p className="error-text">{errors.paidType}</p>}
       </div>
 
       <div>
