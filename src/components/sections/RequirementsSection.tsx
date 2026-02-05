@@ -14,19 +14,19 @@ export const RequirementsSection = () => {
         <ul className="space-y-6">
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">1</span>
-            <p className="text-[#1A1A1A]">Выпускники ВУЗов и ССУЗов по техническим и гуманитарным специальностям</p>
+            <p className="text-[#1A1A1A]">Выпускники ВУЗов и ССУЗов по техническим специальностям</p>
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">2</span>
-            <p className="text-[#1A1A1A]">Базовые знания профессии и смежных областей, готовность к активному углубленному изучению специфики производства под руководством наставников предприятия.</p>
+            <p className="text-[#1A1A1A]">Работники, имеющие базовые знания профессии и смежных областей, готовые к углубленному изучению специфики производства под руководством наставников предприятия.</p>
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">3</span>
-            <p className="text-[#1A1A1A]">Готовность к обучению, профессиональному развитию, работе в команде</p>
+            <p className="text-[#1A1A1A]">Работники, готовые к непрерывному фирменному обучению, профессиональному развитию, работе в команде</p>
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">4</span>
-            <p className="text-[#1A1A1A]">Ответственность, целеустремлённость и желание работать в стабильной компании</p>
+            <p className="text-[#1A1A1A]">Работники ответственные и целеустремленные, желающие работать в стабильной компании</p>
           </li>
         </ul>
       </Card>

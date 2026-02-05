@@ -124,6 +124,16 @@ export const ApplicationForm = ({
 
   const validateDateDdMmYyyy = (s: string) => /^\d{2}\.\d{2}\.\d{4}$/.test(s.trim());
 
+  const isValidCalendarDate = (s: string): boolean => {
+    if (!validateDateDdMmYyyy(s)) return false;
+    const [dd, mm, yyyy] = s.trim().split('.').map(Number);
+    if (mm < 1 || mm > 12) return false;
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const febDays = (yyyy % 4 === 0 && yyyy % 100 !== 0) || yyyy % 400 === 0 ? 29 : 28;
+    const maxDay = mm === 2 ? febDays : daysInMonth[mm - 1];
+    return dd >= 1 && dd <= maxDay;
+  };
+
   const validateInternship = () => {
     const newErrors: Record<string, string> = {};
     if (!internshipData.region) newErrors.region = 'Выберите регион';
@@ -138,8 +148,10 @@ export const ApplicationForm = ({
     if (!internshipData.course) newErrors.course = 'Выберите курс';
     if (!internshipData.internshipDateFrom.trim()) newErrors.internshipDateFrom = 'Укажите дату начала';
     else if (!validateDateDdMmYyyy(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Формат: дд.мм.гггг';
+    else if (!isValidCalendarDate(internshipData.internshipDateFrom)) newErrors.internshipDateFrom = 'Некорректная дата';
     if (!internshipData.internshipDateTo.trim()) newErrors.internshipDateTo = 'Укажите дату окончания';
     else if (!validateDateDdMmYyyy(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Формат: дд.мм.гггг';
+    else if (!isValidCalendarDate(internshipData.internshipDateTo)) newErrors.internshipDateTo = 'Некорректная дата';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -258,7 +270,7 @@ export const ApplicationForm = ({
           className="w-full bg-white text-[#1A1A1A] p-6 rounded-[24px] text-left border-2 border-gray-100 hover:border-[#4A90E2] transition-all shadow-md hover:shadow-lg hover:-translate-y-1 relative overflow-hidden group"
         >
           <div className="relative z-10">
-            <h3 className="text-xl font-bold mb-1">Практика</h3>
+            <h3 className="text-xl font-bold mb-1">Стажировка</h3>
             <p className="text-gray-500 text-sm">Для студентов вузов и ссузов</p>
           </div>
           <div className="absolute top-0 right-0 w-24 h-24 bg-[#4A90E2]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#4A90E2]/10 transition-colors" />
@@ -695,7 +707,7 @@ export const ApplicationForm = ({
           ) : <div className="w-10" />}
 
           <span className="font-semibold text-gray-800">
-            {isSubmitting ? 'Минутку...' : submitStatus === 'idle' ? (view === 'choice' ? 'Меню' : view === 'employment' ? 'Трудоустройство' : view === 'internship' ? 'Практика' : 'Тест эксельки') : 'Статус'}
+            {isSubmitting ? 'Минутку...' : submitStatus === 'idle' ? (view === 'choice' ? 'Меню' : view === 'employment' ? 'Трудоустройство' : view === 'internship' ? 'Стажировка' : 'Тест эксельки') : 'Статус'}
           </span>
 
           {!isSubmitting && (
