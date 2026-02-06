@@ -287,6 +287,7 @@ function App() {
         isSubmitting={isSubmitting}
         submitStatus={submitStatus}
         errorMessage={errorMessage}
+        onResetStatus={() => setSubmitStatus('idle')}
       />
 
       <QuizSection

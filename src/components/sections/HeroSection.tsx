@@ -22,13 +22,35 @@ export const HeroSection = ({ onScrollToForm }: HeroSectionProps) => {
         Выбери свою профессию и начни карьеру в крупнейшей газотранспортной компании.
       </p>
 
-      <div className="w-full max-w-[255px] aspect-square relative mb-12">
-        <div className="absolute inset-0 bg-[#E8E8E8] rounded-[40px] rotate-6 scale-95" />
-        <div className="absolute inset-0 bg-white shadow-xl rounded-[40px] flex items-center justify-center p-6">
+      <div className="w-full max-w-[180px] aspect-square relative mb-8">
+        <div className="absolute inset-0 bg-[#E8E8E8] rounded-[30px] rotate-6 scale-95" />
+        <div className="absolute inset-0 bg-white shadow-xl rounded-[30px] flex items-center justify-center p-5">
           <img
             src={gazpromLogo}
             alt="Газпром трансгаз Сургут"
             className="w-full h-full object-contain"
+          />
+        </div>
+      </div>
+
+      <div className="w-full mt-8 mb-12 relative">
+        {/* Background decorations for the video area */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#4A90E2] rounded-full blur-[100px] opacity-10 -z-10" />
+
+        <Heading level={2} className="mb-2 text-center !text-xl px-4">
+          Приветствие заместителя <br />
+          <span className="text-[#4A90E2]">генерального директора по управлению персоналом</span>
+        </Heading>
+        <p className="text-gray-600 text-lg mb-8 max-w-[280px] mx-auto">
+          ООО «Газпром трансгаз Сургут»
+        </p>
+
+        <div className="relative w-full aspect-video bg-black rounded-[32px] overflow-hidden shadow-[0_30px_90px_-10px_rgba(74,144,226,0.7)] border-4 border-white/20 group hover:shadow-[0_40px_110px_-10px_rgba(74,144,226,0.8)] transition-all duration-300">
+          <video
+            src="/da.MP4"
+            className="w-full h-full object-cover"
+            controls
+            playsInline
           />
         </div>
       </div>
