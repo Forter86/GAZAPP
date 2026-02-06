@@ -36,8 +36,9 @@ dist-ssr
 *.mkv
 *.webm
 
-# Specific large video file
+# Specific large video files
 !public/gzp_video.mp4
+!public/da.MP4
 
 # Large images (uncomment if needed)
 # *.jpg
