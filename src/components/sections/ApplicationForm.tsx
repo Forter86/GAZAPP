@@ -282,7 +282,7 @@ export const ApplicationForm = ({
         >
           <div className="relative z-10">
             <h3 className="text-xl font-bold mb-1">Заявка на трудоустройство</h3>
-            <p className="text-blue-100 text-sm opacity-90">Полная анкета соискателя</p>
+            <p className="text-blue-100 text-sm opacity-90">Для соискателя</p>
           </div>
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform" />
         </button>
