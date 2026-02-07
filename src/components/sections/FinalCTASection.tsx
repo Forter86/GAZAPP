@@ -14,7 +14,7 @@ export const FinalCTASection = ({ onOpenForm, onOpenQuiz, onOpenExcelTest }: Fin
       <Heading level={2} className="mb-4">Готов начать карьеру?</Heading>
       <p className="text-blue-100 mb-10 text-lg">
         Присоединяйся к команде профессионалов ООО «Газпром трансгаз Сургут».
-        Отправь заявку и мы свяжемся с тобой.
+        Отправь заявку, и мы свяжемся с тобой.
       </p>
 
       <div className="space-y-3 mb-8">

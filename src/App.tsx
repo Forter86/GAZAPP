@@ -208,7 +208,7 @@ function App() {
     } catch (error: any) {
       console.error('Error sending email:', error);
       setSubmitStatus('error');
-      setErrorMessage(error.message || 'Временные неполадки. Попробуйте еще раз позже.');
+      setErrorMessage(error.message || 'Временные неполадки. Попробуйте ещё раз позже.');
     } finally {
       setIsSubmitting(false);
     }

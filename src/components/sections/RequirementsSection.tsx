@@ -18,7 +18,7 @@ export const RequirementsSection = () => {
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">2</span>
-            <p className="text-[#1A1A1A]">Работники, имеющие базовые знания профессии и смежных областей, готовые к углубленному изучению специфики производства под руководством наставников предприятия.</p>
+            <p className="text-[#1A1A1A]">Работники, имеющие базовые знания профессии и смежных областей, готовые к углублённому изучению специфики производства под руководством наставников предприятия.</p>
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">3</span>
@@ -26,7 +26,7 @@ export const RequirementsSection = () => {
           </li>
           <li className="flex items-start gap-4">
             <span className="bg-[#4A90E2] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-1">4</span>
-            <p className="text-[#1A1A1A]">Работники ответственные и целеустремленные, желающие работать в стабильной компании</p>
+            <p className="text-[#1A1A1A]">Работники ответственные и целеустремлённые, желающие работать в стабильной компании</p>
           </li>
         </ul>
       </Card>

@@ -44,7 +44,7 @@ export const VideoSection = () => {
     return (
         <section className="px-6 py-12 relative">
             <Heading level={2} className="mb-8 text-center">
-                Мы сняли фильм про нашу Молодежку! <br />
+                Мы сняли фильм про нашу Молодёжку! <br />
                 <span className="text-[#4A90E2]">Они уже с нами!</span>
             </Heading>
 

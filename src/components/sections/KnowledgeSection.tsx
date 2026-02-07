@@ -402,7 +402,7 @@ IT-форум в Ханты-Мансийске
 • Магистратура: 20 июня - 20 августа
 
 Ответственность:
-При невыполнении обязательств по договору необходимо возместить затраты на меры поддержки и выплатить штраф в размере затрат на обучение....`
+При невыполнении обязательств по договору необходимо возместить затраты на меры поддержки и выплатить штраф в размере затрат на обучение...`
     },
     {
         id: 'target-universities',
@@ -591,7 +591,7 @@ export const KnowledgeSection = () => {
                     </div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-3">Ошибка</h3>
                     <p className="text-gray-600 mb-2">{errorMessage || 'Что-то пошло не так'}</p>
-                    <p className="text-red-500 text-sm font-medium mb-8 italic">Временные неполадки. Попробуйте еще раз позже.</p>
+                    <p className="text-red-500 text-sm font-medium mb-8 italic">Временные неполадки. Попробуйте ещё раз позже.</p>
                     <button
                         onClick={() => setSubmitStatus('idle')}
                         className="w-full py-4 rounded-2xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition-colors"

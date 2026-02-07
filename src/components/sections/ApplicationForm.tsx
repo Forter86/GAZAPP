@@ -259,7 +259,7 @@ export const ApplicationForm = ({
           </div>
           <h3 className="text-2xl font-bold text-gray-800 mb-3">Ошибка</h3>
           <p className="text-gray-600 mb-2">{errorMessage || 'Что-то пошло не так'}</p>
-          <p className="text-red-500 text-sm font-medium mb-8 italic">Временные неполадки. Попробуйте еще раз позже.</p>
+          <p className="text-red-500 text-sm font-medium mb-8 italic">Временные неполадки. Попробуйте ещё раз позже.</p>
           <Button onClick={() => { setView('choice'); onResetStatus(); }} variant="outline" className="w-full">Вернуться к выбору</Button>
         </div>
       );
