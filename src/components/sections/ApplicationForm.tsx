@@ -277,12 +277,12 @@ export const ApplicationForm = ({
 
       <div className="w-full space-y-4">
         <button
-          onClick={() => setView('employment')}
+          onClick={() => setView('excelTest')}
           className="w-full bg-[#4A90E2] text-white p-6 rounded-[24px] text-left hover:bg-[#357ABD] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group"
         >
           <div className="relative z-10">
-            <h3 className="text-xl font-bold mb-1">Трудоустройство</h3>
-            <p className="text-blue-100 text-sm opacity-90">Для опытных специалистов</p>
+            <h3 className="text-xl font-bold mb-1">Заявка на трудоустройство</h3>
+            <p className="text-blue-100 text-sm opacity-90">Полная анкета соискателя</p>
           </div>
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform" />
         </button>
@@ -296,17 +296,6 @@ export const ApplicationForm = ({
             <p className="text-gray-500 text-sm">Для студентов вузов и ссузов</p>
           </div>
           <div className="absolute top-0 right-0 w-24 h-24 bg-[#4A90E2]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#4A90E2]/10 transition-colors" />
-        </button>
-
-        <button
-          onClick={() => setView('excelTest')}
-          className="w-full bg-white text-[#1A1A1A] p-6 rounded-[24px] text-left border-2 border-blue-100 hover:border-[#4A90E2] transition-all shadow-md hover:shadow-lg hover:-translate-y-1 relative overflow-hidden group"
-        >
-          <div className="relative z-10">
-            <h3 className="text-xl font-bold mb-1">Тест эксельки</h3>
-            <p className="text-gray-500 text-sm">Полная анкета соискателя</p>
-          </div>
-          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-500/10 transition-colors" />
         </button>
 
       </div>
@@ -772,7 +761,7 @@ export const ApplicationForm = ({
           ) : <div className="w-10" />}
 
           <span className="font-semibold text-gray-800">
-            {isSubmitting ? 'Минутку...' : submitStatus === 'idle' ? (view === 'choice' ? 'Меню' : view === 'employment' ? 'Трудоустройство' : view === 'internship' ? 'Стажировка' : 'Тест эксельки') : 'Статус'}
+            {isSubmitting ? 'Минутку...' : submitStatus === 'idle' ? (view === 'choice' ? 'Меню' : view === 'excelTest' ? 'Заявка на трудоустройство' : view === 'internship' ? 'Стажировка' : 'Трудоустройство') : 'Статус'}
           </span>
 
           {!isSubmitting && (

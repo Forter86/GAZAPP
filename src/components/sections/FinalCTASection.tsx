@@ -27,7 +27,7 @@ export const FinalCTASection = ({ onOpenForm, onOpenQuiz, onOpenExcelTest }: Fin
           className="w-full bg-white text-[#4A90E2] hover:bg-gray-100"
           onClick={onOpenExcelTest}
         >
-          Тест эксельки
+          Заявка на трудоустройство
         </Button>
 
         <button
@@ -55,7 +55,7 @@ export const FinalCTASection = ({ onOpenForm, onOpenQuiz, onOpenExcelTest }: Fin
           onClick={() => window.open('https://t.me/smus_gtsurgut', '_blank')}
         >
           <Send className="w-4 h-4" />
-          Вступить в СМУС
+          Вступить в молодёжку
         </Button>
       </div>
 
