@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
 function getFormTypeLabel(type) {
   if (type === 'internship') return 'ПРАКТИКА';
   if (type === 'event') return 'МЕРОПРИЯТИЕ';
-  if (type === 'excelTest') return 'ТЕСТ ЭКСЕЛЬКИ';
+  if (type === 'excelTest') return 'ЗАЯВКА НА ТРУДОУСТРОЙСТВО';
   return 'ТРУДОУСТРОЙСТВО';
 }
 
@@ -164,11 +164,11 @@ async function buildExcelTestEmail(data) {
   const L = data.lastName || 'unknown';
   const F = data.firstName ? data.firstName[0] : '';
   const P = data.patronymic ? data.patronymic[0] : '';
-  const filename = `anketa_${L}${F}${P}.xlsx`;
+  const filename = `zayavka_trudoustroystvo_${L}_${F}${P}.xlsx`;
 
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
-      <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Полная анкета соискателя (Excel)</h2>
+      <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Заявка на трудоустройство</h2>
       <p><b>ФИО:</b> ${data.lastName} ${data.firstName} ${data.patronymic || ''}</p>
       <p><b>Вакансия:</b> ${data.vacancy}</p>
       <p><b>Email:</b> ${data.email}</p>
